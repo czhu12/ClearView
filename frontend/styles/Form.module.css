@@ -1,0 +1,56 @@
+
+/* Checkboxes & Radio buttons */
+.checkbox-container .subkey {
+  color: var(--secondary-400);
+}
+
+.checkbox-container .checkbox-card  {
+  border: 1px solid var(--secondary-400);
+  background-color: #ffffff;
+  box-shadow: 0px 3px 5px rgba(var(--gray-light), 0.2);
+  min-height: 40px;
+  border-radius: 8px;
+  padding: 11px 16px;
+  width: 650px;
+  min-width: 250px;
+  gap: 8px;
+}
+
+.checkbox-container .checkbox-card:hover  {
+  background-color: var(--secondary-100);
+  border: 1.5px solid var(--primary);
+  cursor: pointer;
+}
+
+.checkbox-container .checkbox-card:active  {
+  background-color: var(--secondary-200);
+  border: 1.5px solid var(--primary);
+}
+
+.checkbox-container .checkbox-card:active input {
+  border-color: var(--primary);
+  box-shadow: none;
+}
+
+.checkbox-container .checkbox-card.checked  {
+  border: 2px solid var(--primary);
+}
+
+.checkbox-container .checkbox-card input  {
+  border-color: var(--secondary-400);
+  margin-right: 2px !important;
+}
+
+.checkbox-container .checkbox-card input:checked  {
+  border-color: var(--primary);
+}
+
+.checkbox-container .checkbox-card input:checked + label {
+  font-weight: bold;
+}
+
+.checkbox-container .checkbox-card img, .checkbox-container .checkbox-card svg {
+  margin-left: auto;
+  max-height: 62px;
+  max-width: 35%;
+}
