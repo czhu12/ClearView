@@ -1,21 +1,19 @@
-import AWS from "aws-sdk";
+import S3 from "aws-sdk/clients/s3";
 
-export const s3 = new AWS.S3({
+export const s3 = new S3({
+  region: process.env.AWS_REGION,
   accessKeyId: process.env.AWS_ACCESS_KEY,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  secretAccessKey: process.env.AWS_SECRET_KEY,
 });
 
-const createBucketPath = (path) => {
-  return `inference/v${process.env.AWS_BUCKET_VERSION}/${path}`
+export const createKeyPath = (path, key=null) => {
+  return `v${process.env.AWS_BUCKET_VERSION}/${path}${key ? `/${key}` : ""}`;
 }
 
-export const imageBucketPath = createBucketPath("images");
-export const metadataBucketPath = createBucketPath("metadata");
-
 export const imageKey = (uid) => {
-  return `${uid}.jpeg`
+  return createKeyPath("images", `${uid}.jpeg`);
 }
 
 export const metadataKey = (uid) => {
-  return `${uid}.json`
+  return createKeyPath("metadata", `${uid}.json`);
 }

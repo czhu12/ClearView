@@ -1,9 +1,10 @@
-import { s3, imageBucketPath, metadataBucketPath } from "../../src/utils";
+import { s3, createKeyPath } from "../../src/utils";
 
-const listContents = async ({ Bucket, nextContinuationToken }) => {
+const listContents = async ({ nextContinuationToken }) => {
   let res = await s3
     .listObjectsV2({
-      Bucket,
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Prefix: createKeyPath("metadata"),
       ContinuationToken: nextContinuationToken || undefined,
     })
     .promise();
@@ -19,16 +20,15 @@ const listContents = async ({ Bucket, nextContinuationToken }) => {
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
-    try {
+    // try {
       var metadataRes = await listContents({
-        Bucket: "metadata",
         nextContinuationToken: req.body.nextContinuationToken
       });
 
       res.status(200).json({contents: metadataRes})
-    } catch {
-      res.status(401).json({ error: 'Failed to upload' });
-    }
+    // } catch {
+    //   res.status(401).json({ error: 'Failed to upload' });
+    // }
   } else {
     res.status(404).json({ name: 'Not found' });
   }
