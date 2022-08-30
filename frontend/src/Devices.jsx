@@ -5,7 +5,6 @@ import axios from 'axios';
 import CheckboxCard from './components/CheckBoxCard';
 import styles from '../styles/Devices.module.css'
 
-
 const CAMERA_DIMENSION = 500;
 const toBase64 = file => new Promise((resolve, reject) => {
   const reader = new FileReader();
@@ -39,6 +38,7 @@ const predictionToString = (prediction) => {
   }
 }
 
+
 function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -65,7 +65,7 @@ const Devices = () => {
       image: imageData,
     }
     try {
-      await axios.post("/devices/predictions", body);
+      await axios.post("/api/inference/create", { image: imageData, metadata })
       setSuccess(true);
       await timeout(1000);
       setSuccess(false);
