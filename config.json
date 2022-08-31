@@ -1,0 +1,20 @@
+{
+  "training": {
+    "source": {
+      "dataset": "data/raw/{version}/"
+    },
+    "test_type": {
+      "dataset": "data/test_type/{version}/",
+      "output": "output/{version}/models/test_type.pt"
+    },
+    "quality": {
+      "dataset": "data/quality/{version}/",
+      "output": "output/{version}/models/quality-{test}.pt"
+    }
+  },
+  "inference": {
+    "models": "output/{version}"
+  },
+  "evaluation": {
+  }
+}
