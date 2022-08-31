@@ -1,6 +1,6 @@
 import { s3, createKeyPath } from "../../src/utils";
 
-const listContents = async ({ nextContinuationToken, startAfter }) => {
+const listContents = async ({ startAfter }) => {
   const prefix = createKeyPath("metadata") + "/";
   const suffix = ".json";
   let res = await s3
@@ -9,7 +9,6 @@ const listContents = async ({ nextContinuationToken, startAfter }) => {
       Prefix: prefix,
       MaxKeys: 10,
       StartAfter: startAfter || undefined,
-      ContinuationToken: nextContinuationToken || undefined,
     })
     .promise();
   const contents = res.
@@ -27,12 +26,11 @@ const listContents = async ({ nextContinuationToken, startAfter }) => {
 export default async function handler(req, res) {
   if (req.method === "GET") {
     var metadataRes = await listContents({
-      nextContinuationToken: req.query.nextContinuationToken,
       startAfter: req.query.startAfter,
     });
 
     res.status(200).json(metadataRes)
   } else {
-    res.status(404).json({ name: 'Not found' });
+    res.status(404).json({ message: 'Not found' });
   }
 }

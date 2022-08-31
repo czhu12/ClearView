@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Devices from "../../src/devices/Devices";
 
 export default function Home() {
   return (
@@ -10,7 +11,7 @@ export default function Home() {
       </Head>
 
       <main>
-        Todo: list of inferences
+        <Devices />
       </main>
     </div>
   )
