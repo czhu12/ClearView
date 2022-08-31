@@ -9,9 +9,6 @@ export default async function handler(req, res) {
     try {
       const imageRes = await s3.deleteObject(imageParams).promise();
       const metadataRes = await s3.deleteObject(metadataParams).promise();
-      // do something with response
-      console.log(imageRes)
-      console.log(metadataREs)
       res.status(200).json({message: 'success'})
     } catch {
       res.status(401).json({ error: 'Failed to destroy' });

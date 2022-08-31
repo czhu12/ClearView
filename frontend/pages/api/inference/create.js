@@ -10,16 +10,17 @@ export default async function handler(req, res) {
         Key: imageKey(uid),
         Body: req.body.image,
       }).promise();
-    
+
+      var metadata = Buffer.from(JSON.stringify(req.body.metadata));
+
       var responeJson = await s3.upload({
         Bucket: process.env.AWS_BUCKET_NAME,
         Key: metadataKey(uid),
-        Body: req.body.metadata,
+        Body: metadata,
+        ContentEncoding: 'base64',
+        ContentType: 'application/json',
       }).promise();
 
-      // do something with response
-      console.log(responseJpeg)
-      console.log(responeJson)
       res.status(200).json({message: 'success'})
     } catch {
       res.status(401).json({ error: 'Failed to upload' });
