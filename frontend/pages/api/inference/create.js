@@ -5,15 +5,19 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     const uid = uuidv4();
     try {
-      var responseJpeg = await s3.upload({
+      var image = Buffer.from(req.body.image.replace(/^data:image\/\w+;base64,/, ""),'base64')
+
+      await s3.upload({
         Bucket: process.env.AWS_BUCKET_NAME,
         Key: imageKey(uid),
-        Body: req.body.image,
+        Body: image,
+        ContentEncoding: 'base64',
+        ContentType: 'image/jpeg'
       }).promise();
 
       var metadata = Buffer.from(JSON.stringify(req.body.metadata));
 
-      var responeJson = await s3.upload({
+      await s3.upload({
         Bucket: process.env.AWS_BUCKET_NAME,
         Key: metadataKey(uid),
         Body: metadata,
