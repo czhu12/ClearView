@@ -1,0 +1,31 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.1.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "aws-sdk": "^2.1205.0",
+    "axios": "^0.27.2",
+    "bootstrap": "^5.2.0",
+    "canvas": "^2.9.3",
+    "next": "12.2.5",
+    "node-sass": "^7.0.1",
+    "react": "18.2.0",
+    "react-bootstrap": "^2.5.0",
+    "react-dom": "18.2.0",
+    "react-webcam": "^7.0.1",
+    "styled-components": "^5.3.5",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "eslint": "8.23.0",
+    "eslint-config-next": "12.2.5"
+  }
+}
