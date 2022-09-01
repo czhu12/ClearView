@@ -1,12 +1,16 @@
 import { createCanvas } from 'canvas';
 
 export default class CropImage {
-  constructor(base64, x, y, width, height) {
+  constructor(base64, {percentageOfX, percentageOfY, maxWidth, maxHeight}) {
     this.base64 = base64;
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
+    this.percentageOfX = percentageOfX;
+    this.percentageOfY = percentageOfY;
+    this.maxWidth = maxWidth;
+    this.maxHeight = maxHeight;
+  }
+
+  ratio(image) {
+    return Math.min(this.maxWidth / image.width, this.maxHeight / image.height);
   }
 
   image() {
@@ -15,12 +19,15 @@ export default class CropImage {
     return img;
   }
 
-  create() {
-    const canvas = createCanvas(this.width, this.height);
+  async start() {
+    const image = this.image();
+    const ratio = this.ratio(image);
+    const width = image.width * ratio;
+    const height = image.height * ratio;
+    const canvas = createCanvas(width, height);
     const context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
-    const image = this.image();
-    context.drawImage(image, this.x, this.y, this.width, this.height, 0, 0, this.width, this.height);
+    context.drawImage(image, image.width / this.percentageOfX, image.height / this.percentageOfY, width, height, 0, 0, width, height);
     return canvas;
   }
 }

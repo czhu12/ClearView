@@ -1,8 +1,10 @@
-import { createCanvas, loadImage } from 'canvas';
+import CropImage from "./crop";
 
 export default class ColorChecker {
-  constructor(canvas, rgb, tolerance) {
-    this.canvas = canvas;
+  constructor(base64, {cropParams, rgb, tolerance}) {
+    this.canvas = null;
+    this.base64 = base64;
+    this.cropParams = cropParams;
     this.rgb = rgb;
     this.tolerance = tolerance;
   }
@@ -12,25 +14,28 @@ export default class ColorChecker {
   }
 
   within_tolerance(averageRGB) {
-    this.between(this.rgb.r, averageRGB.r) &&
+    return this.between(this.rgb.r, averageRGB.r) &&
     this.between(this.rgb.g, averageRGB.g) &&
     this.between(this.rgb.b, averageRGB.b)
   }
 
-  presence() {
-    const averageRGB = this.getAverageRGB();
-    return this.within_tolerance(averageRGB)
+  async start() {
+    return new Promise(async (resolve, reject) => {
+      this.canvas = await new CropImage(this.base64, this.cropParams).start();
+      const averageRGB = this.getAverageRGB();
+      resolve(this.within_tolerance(averageRGB))
+    });
   }
 
   getAverageRGB() {
     var context = this.canvas.getContext('2d'),
-        data, width, height,
+        data,
         i = -4,
         length,
         rgb = {r:0,g:0,b:0},
         count = 0;
 
-    data = context.getImageData(0, 0, width, height);
+    data = context.getImageData(0, 0, this.canvas.width, this.canvas.height);
     length = data.data.length;
 
     while ( (i += 4) < length ) {

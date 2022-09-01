@@ -1,6 +1,6 @@
 
 class ORCChecker {
-  constructor(image, location) {
+  constructor({image, location}) {
     this.image = image;
     this.location = location;
   }
