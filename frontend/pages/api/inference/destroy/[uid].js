@@ -1,4 +1,4 @@
-import { s3, imageKey, metadataKey } from "../../../src/utils";
+import { s3, imageKey, metadataKey } from "../../../../src/utils";
 
 export default async function handler(req, res) {
   const { uid } = req.query
