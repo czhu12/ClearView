@@ -7,10 +7,7 @@ import torch
 from config import ConfigManager
 import shutil
 from dotenv import load_dotenv
-def make_if_not_exist(directory):
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-
+from utils import make_if_not_exist
 load_dotenv()
 
 @click.command()
@@ -21,11 +18,25 @@ def main(version):
     source_df = pd.read_csv(os.path.join(source_dir, 'data.csv'))
 
     test_type_dir = config.data["training"]["test_type"]["dataset"].format(version=version)
-    train_dir = os.path.join(test_type_dir, 'train')
-    validation_dir = os.path.join(test_type_dir, 'val')
+    test_type_train_dir = os.path.join(test_type_dir, 'train')
+    test_type_validation_dir = os.path.join(test_type_dir, 'val')
+
+
     for i, row in source_df.iterrows():
-        basedir = os.path.join(train_dir, row['testType'])
-        make_if_not_exist(basedir)
-        shutil.copyfile(row['local_image_path'], os.path.join(basedir, os.path.basename(row['local_image_path'])))
+        target_dir = test_type_train_dir if row['mode'] == 'train' else test_type_validation_dir
+        test_type_basedir = os.path.join(target_dir, row['testType'])
+        make_if_not_exist(test_type_basedir)
+        shutil.copyfile(row['local_image_path'], os.path.join(test_type_basedir, os.path.basename(row['local_image_path'])))
+
+        quality_dir = config.data["training"]["quality"]["dataset"].format(version=version, test_type=row['testType'])
+        quality_train_dir = os.path.join(quality_dir, 'train')
+        quality_validation_dir = os.path.join(quality_dir, 'val')
+
+        quality_target_dir = quality_train_dir if row['mode'] == 'train' else quality_validation_dir
+        quality_basedir = os.path.join(quality_target_dir, row['quality'])
+        print(quality_basedir)
+        make_if_not_exist(quality_basedir)
+        shutil.copyfile(row['local_image_path'], os.path.join(quality_basedir, os.path.basename(row['local_image_path'])))
+
 if __name__ == "__main__":
     main()

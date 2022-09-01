@@ -1,15 +1,15 @@
 {
   "training": {
     "source": {
-      "dataset": "data/raw/{version}/"
+      "dataset": "data/{version}/raw/"
     },
     "test_type": {
-      "dataset": "data/test_type/{version}/",
-      "output": "output/{version}/models/test_type.pt"
+      "dataset": "data/{version}/test_type/",
+      "model_path": "output/{version}/models/test_type.pt"
     },
     "quality": {
-      "dataset": "data/quality/{version}/",
-      "output": "output/{version}/models/quality-{test}.pt"
+      "dataset": "data/{version}/quality/{test_type}/",
+      "model_path": "output/{version}/models/quality-{test_type}.pt"
     }
   },
   "inference": {

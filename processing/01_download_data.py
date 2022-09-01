@@ -12,10 +12,7 @@ import os
 import torch
 from config import ConfigManager
 from dotenv import load_dotenv
-
-def make_if_not_exist(directory):
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+from utils import make_if_not_exist
 
 load_dotenv()
 BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
