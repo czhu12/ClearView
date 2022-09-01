@@ -15,15 +15,15 @@ from dotenv import load_dotenv
 from utils import make_if_not_exist
 
 load_dotenv()
-BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
+BUCKET_NAME = os.getenv("APP_AWS_BUCKET_NAME")
 
 @click.command()
 @click.argument('version')
 def main(version):
     config = ConfigManager()
     session = boto3.Session(
-        aws_access_key_id=os.getenv("AWS_ACCESS_KEY"),
-        aws_secret_access_key=os.getenv("AWS_SECRET_KEY"),
+        aws_access_key_id=os.getenv("APP_AWS_ACCESS_KEY"),
+        aws_secret_access_key=os.getenv("APP_AWS_SECRET_KEY"),
     )
     source_dir = config.data["training"]["source"]["dataset"].format(version=version)
     train_dir = os.path.join(source_dir, 'train')

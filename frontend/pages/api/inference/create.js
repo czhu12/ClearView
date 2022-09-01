@@ -8,7 +8,7 @@ export default async function handler(req, res) {
       var image = Buffer.from(req.body.image.replace(/^data:image\/\w+;base64,/, ""),'base64')
 
       await s3.upload({
-        Bucket: process.env.AWS_BUCKET_NAME,
+        Bucket: process.env.APP_AWS_BUCKET_NAME,
         Key: imageKey(uid),
         Body: image,
         ContentEncoding: 'base64',
@@ -18,7 +18,7 @@ export default async function handler(req, res) {
       var metadata = Buffer.from(JSON.stringify(req.body.metadata));
 
       await s3.upload({
-        Bucket: process.env.AWS_BUCKET_NAME,
+        Bucket: process.env.APP_AWS_BUCKET_NAME,
         Key: metadataKey(uid),
         Body: metadata,
         ContentEncoding: 'base64',

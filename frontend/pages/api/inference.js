@@ -5,7 +5,7 @@ const listContents = async ({ startAfter }) => {
   const suffix = ".json";
   let res = await s3
     .listObjectsV2({
-      Bucket: process.env.AWS_BUCKET_NAME,
+      Bucket: process.env.APP_AWS_BUCKET_NAME,
       Prefix: prefix,
       MaxKeys: 10,
       StartAfter: startAfter || undefined,

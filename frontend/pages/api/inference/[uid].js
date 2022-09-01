@@ -5,14 +5,14 @@ export default async function handler(req, res) {
     const { uid } = req.query
     try {
       const imageData = await s3.getObject({
-        Bucket: process.env.AWS_BUCKET_NAME,
+        Bucket: process.env.APP_AWS_BUCKET_NAME,
         Key: imageKey(uid),
       }).promise();
 
       const image = "data:image/jpeg;base64," + encode(imageData.Body)
 
       const metadataData = await s3.getObject({
-        Bucket: process.env.AWS_BUCKET_NAME,
+        Bucket: process.env.APP_AWS_BUCKET_NAME,
         Key: metadataKey(uid),
       }).promise();
     

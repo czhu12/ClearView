@@ -5,12 +5,12 @@ export default async function handler(req, res) {
   if (req.method === "DELETE") {
     try {
       await s3.deleteObject({
-        Bucket: process.env.AWS_BUCKET_NAME,
+        Bucket: process.env.APP_AWS_BUCKET_NAME,
         Key: imageKey(uid)
       }).promise();
 
       await s3.deleteObject({
-        Bucket: process.env.AWS_BUCKET_NAME,
+        Bucket: process.env.APP_AWS_BUCKET_NAME,
         Key: metadataKey(uid)
       }).promise();
 

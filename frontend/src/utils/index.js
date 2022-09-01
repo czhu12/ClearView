@@ -1,13 +1,13 @@
 import S3 from "aws-sdk/clients/s3";
 
 export const s3 = new S3({
-  region: process.env.AWS_REGION,
-  accessKeyId: process.env.AWS_ACCESS_KEY,
-  secretAccessKey: process.env.AWS_SECRET_KEY,
+  region: process.env.APP_AWS_REGION,
+  accessKeyId: process.env.APP_AWS_ACCESS_KEY,
+  secretAccessKey: process.env.APP_AWS_SECRET_KEY,
 });
 
 export const createKeyPath = (path, key=null) => {
-  return `v${process.env.AWS_BUCKET_VERSION}/${path}${key ? `/${key}` : ""}`;
+  return `v${process.env.APP_AWS_BUCKET_VERSION}/${path}${key ? `/${key}` : ""}`;
 }
 
 export const imageKey = (uid) => {
