@@ -17,3 +17,9 @@ export const imageKey = (uid) => {
 export const metadataKey = (uid) => {
   return createKeyPath("metadata", `${uid}.json`);
 }
+
+export function encode(data){
+  let buf = Buffer.from(data);
+  let base64 = buf.toString('base64');
+  return base64
+}

@@ -1,6 +1,13 @@
 import Head from 'next/head'
+import { useRouter } from 'next/router';
+import Quality from '../../../src/devices/Quality'
 
 export default function Home() {
+  const { query, isReady } = useRouter();
+
+  if (!isReady) {
+    return <></>
+  }
   return (
     <div>
       <Head>
@@ -10,7 +17,7 @@ export default function Home() {
       </Head>
 
       <main>
-        Todo: view here
+       <Quality uid={query.uid} />
       </main>
     </div>
   )

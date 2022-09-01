@@ -2,8 +2,8 @@ import Webcam from 'react-webcam';
 import React, { useState, useRef, useCallback } from "react";
 import { Container, Button, Image, Form } from "react-bootstrap";
 import axios from 'axios';
-import CheckboxCard from './components/CheckBoxCard';
-import styles from '../styles/Devices.module.css'
+import CheckboxCard from '../components/CheckBoxCard';
+import styles from '../../styles/Devices.module.css'
 
 const CAMERA_DIMENSION = 500;
 const toBase64 = file => new Promise((resolve, reject) => {
@@ -30,7 +30,7 @@ function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-const Devices = () => {
+const Labeling = () => {
   const [imageData, setImageData] = useState(null);
   const [testType, setTestType] = useState("abbott");
   const [label, setLabel] = useState(null);
@@ -197,4 +197,4 @@ const Devices = () => {
   );
 }
 
-export default Devices;
+export default Labeling;
