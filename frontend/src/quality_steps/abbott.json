@@ -13,6 +13,13 @@
         "rgb": {"r": 221, "g": 84, "b": 153},
         "tolerance": 25
       }
+    },
+    {
+      "name": "hasCorrectText",
+      "check": "orc",
+      "params": {
+        "words": ["Binax", "NOW", "COVID-19", "Ag", "CARD"]
+      }
     }
   ]
 }
