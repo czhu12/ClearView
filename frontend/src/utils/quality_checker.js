@@ -1,7 +1,9 @@
 import ColorChecker from "./color_checker";
+import ORCChecker from "./orc_checker";
 
 const STEPS = {
   "color": ColorChecker,
+  "orc": ORCChecker,
 }
 
 export default class QualityChecker {
