@@ -1,9 +1,10 @@
 import Webcam from 'react-webcam';
 import React, { useState, useRef, useCallback } from "react";
-import { Container, Button, Image, Form } from "react-bootstrap";
+import { Container, Button, Form } from "react-bootstrap";
 import axios from 'axios';
 import CheckboxCard from '../components/CheckBoxCard';
 import styles from '../../styles/Devices.module.css'
+import { ToastContainer, toast } from 'react-toastify';
 
 const CAMERA_DIMENSION = 500;
 const toBase64 = file => new Promise((resolve, reject) => {
@@ -25,42 +26,43 @@ const getImageOutline = (testType) => {
   }
 }
 
-
-function timeout(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 const Labeling = () => {
   const [imageData, setImageData] = useState(null);
   const [testType, setTestType] = useState("abbott");
   const [label, setLabel] = useState(null);
   const [quality, setQuality] = useState(null);
-  const [success, setSuccess] = useState(false);
   const webcamRef = useRef(null);
 
-  const saveLabel = async () => {
-    const body = {
-      metadata: {
-        quality,
-        label,
-        testType,
-      },
-      image: imageData,
-    }
-    try {
-      await axios.post("/api/inference/create", body)
-      setSuccess(true);
-      await timeout(1000);
-      setSuccess(false);
-      setImageData(null);
-    } catch(error) {
-      alert("Something went wrong!");
+  const requiredQuestionsAnswered = !!(quality && label && testType);
+
+  const saveLabel = async (image) => {
+    if (requiredQuestionsAnswered) {
+      const body = {
+        metadata: {
+          quality,
+          label,
+          testType,
+        },
+        image,
+      }
+      try {
+        axios.post("/api/inference/create", body).then((r) => {
+          toast.success('Success')
+        })
+        setImageData(null);
+      } catch(error) {
+        alert("Something went wrong!");
+      }
+    } else {
+      setImageData(image);
     }
   };
 
+  console.log(requiredQuestionsAnswered)
+
   const capture = useCallback(async () => {
-    const newImageData = webcamRef.current.getScreenshot();
-    setImageData(newImageData);
+      const newImageData = webcamRef.current.getScreenshot();
+      saveLabel(newImageData);
     }, [webcamRef]
   );
 
@@ -149,21 +151,6 @@ const Labeling = () => {
             </Button>
           </div>
         )}
-        {imageData && (
-          <div>
-            <Image src={imageData} className="mb-4" />
-            <Button
-              className="btn-block"
-              variant="info"
-              onClick={() => {
-                setImageData(null);
-                setData(null);
-              }}
-            >
-              Retry
-            </Button>
-          </div>
-        )}
         {!imageData && (
           <div>
             <div className="or-container">
@@ -180,19 +167,21 @@ const Labeling = () => {
       </div>
       {imageData && (
         <div>
-          {label && imageData && quality && (
+          <img src={imageData} />
+          {requiredQuestionsAnswered && (
             <Button
               className="btn-block"
               onClick={() => {
-                saveLabel();
+                saveLabel(imageData);
               }}
             >
               Submit Label
             </Button>
           )}
-          {success && <div className="text-success font-weight-bold text-center">Success!</div>}
+          
         </div>
       )}
+      <ToastContainer position="top-right" autoClose={5000} />
     </Container>
   );
 }
