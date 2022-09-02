@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Container, Button, Spinner } from "react-bootstrap";
 import axios from "axios";
-import QualityChecker from "../utils/quality_checker";
-import ORCChecker from "../utils/orc_checker";
+import QualityChecker from "../utils/QualityChecker";
+import abbottQualityChecker from "../../src/quality_steps/abbott.json";
 
 const Quality = ({uid}) => {
   const [data, setData] = useState(null);
@@ -18,33 +18,8 @@ const Quality = ({uid}) => {
     fetchData();
   }, [])
 
-
   const qualityTest = async () => {
-      const quality = await new QualityChecker(data.image, {
-      "steps": [
-        {
-          "name": "bannerColorIsPink",
-          "check": "color",
-          "params": {
-            "cropParams": {
-              "percentageOfX": 2,
-              "percentageOfY": 20,
-              "maxWidth": 50,
-              "maxHeight": 50
-            },
-            "rgb": {"r": 221, "g": 84, "b": 153},
-            "tolerance": 25
-          }
-        },
-        {
-          "name": "hasCorrectText",
-          "check": "orc",
-          "params": {
-            "words": ["Binax", "NOW", "COVID-19", "Ag", "CARD"]
-          }
-        }
-      ]
-    }).start();
+    const quality = await new QualityChecker(data.image, abbottQualityChecker).execute(data);
     console.log(quality)
   }
 

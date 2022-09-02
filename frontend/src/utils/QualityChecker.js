@@ -1,5 +1,5 @@
-import ColorChecker from "./color_checker";
-import ORCChecker from "./orc_checker";
+import ColorChecker from "./ColorChecker";
+import ORCChecker from "./OrcChecker";
 
 const STEPS = {
   "color": ColorChecker,
@@ -14,11 +14,11 @@ export default class QualityChecker {
   }
   
   async startStep(step) {
-    const value = await new STEPS[step.check](this.image, step.params).start();
+    const value = await new STEPS[step.check](step.params).execute(this);
     this.quality[step.name] = value;
   }
 
-  async start() {
+  async execute() {
     for (var i = 0; i < this.steps.length; i++) {
       await this.startStep(this.steps[i])
     }

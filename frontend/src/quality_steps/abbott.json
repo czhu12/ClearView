@@ -7,8 +7,8 @@
         "cropParams": {
           "percentageOfX": 2,
           "percentageOfY": 20,
-          "maxWidth": 50,
-          "maxHeight": 50
+          "width": 50,
+          "height": 50
         },
         "rgb": {"r": 221, "g": 84, "b": 153},
         "tolerance": 25
