@@ -121,7 +121,7 @@ const Labeling = () => {
       <div className="pb-3">
         <h3 className="my-5">Hold the test in front of the camera</h3>
         {!imageData && (
-          <div className="mb-4">
+          <div className="mb-4" style={{width: "max-content"}}>
             <div className={styles["camera-wrapper"]}>
               <div className={styles["camera-image-overlay"]}>
                 <img src={getImageOutline(testType)} />
