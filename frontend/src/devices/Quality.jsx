@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Button, Spinner } from "react-bootstrap";
 import axios from "axios";
 import QualityChecker from "../utils/quality_checker";
+import ORCChecker from "../utils/orc_checker";
 
 const Quality = ({uid}) => {
   const [data, setData] = useState(null);
@@ -34,12 +35,18 @@ const Quality = ({uid}) => {
             "rgb": {"r": 221, "g": 84, "b": 153},
             "tolerance": 25
           }
+        },
+        {
+          "name": "hasCorrectText",
+          "check": "orc",
+          "params": {
+            "words": ["Binax", "NOW", "COVID-19", "Ag", "CARD"]
+          }
         }
       ]
     }).start();
     console.log(quality)
   }
-
 
   return (
     <Container style={{maxWidth: "560px"}} className="py-4 px-4" id="self-checkout">
