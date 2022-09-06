@@ -1,6 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Button, Spinner } from "react-bootstrap";
+import { Container, Row, Col, Button, Spinner, Badge } from "react-bootstrap";
 import axios from "axios";
+
+const BADGES = {
+  quality: {
+    good: "success",
+    bad: "danger",
+  },
+  label: {
+    negative: "success",
+    positive: "danger",
+    inconclusive: "warning",
+  },
+  testType: {
+    abbott: "pink",
+    ihealth: "danger"
+  }
+}
+
 
 const Labeling = () => {
   const [data, setData] = useState([]);
@@ -15,7 +32,7 @@ const Labeling = () => {
     for (let i = 0; i < response.data.uids.length; i++) {
       const uid = response.data.uids[i]
       const res = await axios.get(`/api/inference/${uid}`)
-      newData.push(res.data)
+      newData.push({...res.data, uid})
       setData([...originalData, ...newData])
     }
     setContinuationKey(response.data.startAfter);
@@ -32,9 +49,19 @@ const Labeling = () => {
       <h3 className="my-3">Images</h3>
       <Row>
         {data.map(d => (
-          <Col xs={12} lg={3} md={4} sm={6}>
+          <Col
+            xs={12}
+            lg={3}
+            md={4}
+            sm={6}
+            className="my-2 pointer"
+            onClick={() => {
+              window.location = `/web/demo/${d.uid}`;
+            }}>
             <img src={d.image} height="200"/>
-            <div>{d.metadata.quality} {d.metadata.label} {d.metadata.testType}</div>
+            <div>
+              {Object.keys(d.metadata).map(k => <Badge className="mx-1" bg={BADGES[k][d.metadata[k]]}>{d.metadata[k]}</Badge> )}
+            </div>
           </Col>
         ))}
       </Row>

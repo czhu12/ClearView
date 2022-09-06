@@ -1,4 +1,4 @@
-import { createCanvas } from "canvas";
+import { createCanvas, loadImage } from "canvas";
 import CropImage from "./CropImage";
 
 export default class ColorChecker {
@@ -20,18 +20,17 @@ export default class ColorChecker {
 
   async execute(state) {
     return new Promise(async (resolve, reject) => {
-      const image = new Image();
-      image.src = state.base64;
-      var canvas = createCanvas(image.width, image.height);
-      var context = canvas.getContext('2d');
-      context.drawImage(image, image.width, image.height);
+      const image = await loadImage(state.base64);
+      const canvas = createCanvas(image.width, image.height);
+      const context = canvas.getContext('2d');
+      context.drawImage(image, 0, 0);
       const canvasState = { canvas: canvas }
       await new CropImage(this.cropParams).execute(canvasState);
-      const averageRGB = this.getAverageRGB(canvasState.canvas);
+      const averageRGB = await this.getAverageRGB(canvasState.canvas);
       resolve(
         {
           result: this.withinTolerance(averageRGB),
-          reason: "",
+          reason: `Average RGB: (${averageRGB.r},${averageRGB.g},${averageRGB.b})`,
         },
       )
     });

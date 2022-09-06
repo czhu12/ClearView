@@ -26,3 +26,11 @@ a {
 .flex {
   display: flex !important;
 }
+
+.bg-pink {
+  background-color: pink;
+}
+
+.pointer {
+  cursor: pointer;
+}

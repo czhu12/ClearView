@@ -15,7 +15,8 @@ export default class CropImage {
     const y1 = canvas.height * this.percentageOfY;
     const x2 = x1 + this.width;
     const y2 = y1 + this.height;
-    let imageData = context.getImageData(x1, y1, x2, y2);
+  
+    let imageData = await context.getImageData(x1, y1, x2, y2);
     const newCanvas = createCanvas(this.width, this.height);
     const newContext = newCanvas.getContext('2d');
     newContext.putImageData(imageData, 0, 0);
