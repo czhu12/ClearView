@@ -20,7 +20,7 @@ const Quality = ({uid}) => {
 
   const qualityTest = async () => {
     const state = { base64: data.image }
-    const pipeline = await PipelineBuilder.loadFromPath("/configs/abbott.json")
+    const pipeline = await PipelineBuilder.loadFromPath(`/configs/${data.metadata.testType}.json`)
     const quality = await pipeline.execute(state);
     setResult({reasons: quality.reasons, state})
   }
@@ -48,6 +48,7 @@ const Quality = ({uid}) => {
       {data && <>
         <img src={data.image} height="200"/>
         <div className="my-2">
+        
           {Object.keys(data.metadata).map(k => (
             <Badge className="mx-1" bg={BADGES[k][data.metadata[k]]}>
               {data.metadata[k]}
