@@ -7,7 +7,7 @@ import abbottQualityChecker from "../../src/quality_steps/abbott.json";
 const Quality = ({uid}) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [quality, setQuality] = useState({});
   const fetchData = async () => {
     const res = await axios.get(`/api/inference/${uid}`)
     setData(res.data)
@@ -19,8 +19,8 @@ const Quality = ({uid}) => {
   }, [])
 
   const qualityTest = async () => {
-    const quality = await new QualityChecker(data.image, abbottQualityChecker).execute(data);
-    console.log(quality)
+    const q = await new QualityChecker(data.image, abbottQualityChecker).execute();
+    setQuality(q)
   }
 
   return (
@@ -32,6 +32,14 @@ const Quality = ({uid}) => {
       </>}
       {loading && <Spinner animation="border" />}
       <Button onClick={qualityTest}> test quality</Button>
+      {Object.keys(quality).map((q, idx) => {
+        return <div key={idx}>
+          <h3>{q}</h3>
+          result: {quality[q].result ? "True" : "False"}
+          <br/>
+          reason: {quality[q].reason}
+        </div>
+      })}
     </Container>
   );
 }
