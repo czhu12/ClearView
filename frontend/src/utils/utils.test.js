@@ -22,8 +22,9 @@ test('CropImage', async () => {
     new CropImage({
       percentageOfX: 0,
       percentageOfY: 0,
-      maxWidth: 0,
-      maxHeight: 0,
+      width: 10,
+      height: 10,
+      outputName: "cropped"
     }),
   ]);
 
@@ -32,16 +33,27 @@ test('CropImage', async () => {
   expect(!!state.cropped).toEqual(true);
 });
 
-/*
-test('ColorChecker', () => {
-  const colorChecker = new ColorChecker({
-    cropParams: {},
-    rgb: {r: 256, g: 0, b: 0},
-    tolerance: 10,
-  });
-  colorChecker.execute({
-    image: ""
-  })
-});
 
-*/
+test('CheckColor', async () => {
+  const state = { base64: RED_IMAGE };
+  const pipeline = new Pipeline([
+    new ToCanvas({width: 512, height: 512}),
+    new CropImage({
+      percentageOfX: 0,
+      percentageOfY: 0,
+      width: 10,
+      height: 10,
+      outputName: "color_crop"
+    }),
+    new CheckColor({
+      rgb: {r: 256, g: 3, b: 20},
+      tolerance: 10,
+      outputName: "color_check",
+      inputCanvasName: "color_crop"
+    }),
+  ]);
+
+  const { result, reason } = await pipeline.execute(state);
+  expect(result).toEqual(true);
+  expect(!!state.color_crop).toEqual(true);
+});
