@@ -1,9 +1,10 @@
 import { createWorker } from 'tesseract.js';
 
 export default class CheckText {
-  constructor({ words, outputName }) {
+  constructor({ words, outputName, canvasId }) {
     this.words = words;
     this.outputName = outputName;
+    this.canvasId = canvasId;
   }
 
   wordInString(text, word) {
@@ -15,7 +16,7 @@ export default class CheckText {
   }
 
   async execute(state) {
-    const buffer = Buffer.from(state.base64.split(',')[1], "base64")
+    const buffer = Buffer.from(state[this.canvasId].toDataURL().split(',')[1], "base64")
     const worker = createWorker();
     await worker.load();
     await worker.loadLanguage('eng');
@@ -23,6 +24,7 @@ export default class CheckText {
     const { data: { text } } = await worker.recognize(buffer);
     await worker.terminate();
     const hasWords = this.hasWords(text)
+    console.log(text)
     return {result: hasWords.length > 0, reason: `Matching words: ${hasWords.join(",")}`};
   }
 }
