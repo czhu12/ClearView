@@ -3,6 +3,8 @@ import ToCanvas from "./ToCanvas";
 import CropImage from "./CropImage";
 import CheckColor from "./CheckColor";
 import CheckText from "./CheckText";
+import QRChecker from "./QRChecker";
+
 
 class PipelineError extends Error {
   constructor(message) {
@@ -29,6 +31,8 @@ export class PipelineBuilder {
         steps.push(new CropImage(step.params));
       } else if (step.name === "CheckColor") {
         steps.push(new CheckColor(step.params));
+      } else if (step.name === "QRChecker") {
+        steps.push(new QRChecker(step.params));
       } else if (step.name === "ToCanvas") {
         steps.push(new ToCanvas(step.params));
       } else if (step.name === "CheckText") {
