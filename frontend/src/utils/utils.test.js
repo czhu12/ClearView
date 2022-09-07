@@ -1,4 +1,4 @@
-import ColorChecker from "./ColorChecker"
+import CheckColor from "./CheckColor"
 import Pipeline from "./Pipeline";
 import { RED_IMAGE } from "./testConstants";
 import CropImage from "./CropImage";

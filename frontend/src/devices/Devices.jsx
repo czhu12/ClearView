@@ -1,23 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Spinner, Badge } from "react-bootstrap";
 import axios from "axios";
-
-const BADGES = {
-  quality: {
-    good: "success",
-    bad: "danger",
-  },
-  label: {
-    negative: "success",
-    positive: "danger",
-    inconclusive: "warning",
-  },
-  testType: {
-    abbott: "pink",
-    ihealth: "danger"
-  }
-}
-
+import { BADGES } from "./utils";
 
 const Labeling = () => {
   const [data, setData] = useState([]);
