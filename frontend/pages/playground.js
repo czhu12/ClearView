@@ -1,5 +1,6 @@
 import Head from 'next/head'
-import ReactJson from 'react-json-view'
+import dynamic from 'next/dynamic'
+const ReactJson = dynamic(import('react-json-view'), {ssr: false})
 
 import { PipelineBuilder } from '../src/utils/Pipeline';
 import { useState } from 'react'
@@ -53,6 +54,7 @@ export default function Playground() {
 
           <h4>Output</h4>
           <canvas style={{border: "1px solid black"}} height="512" width="512" id="output-canvas"></canvas>
+          <h4>Success: {!!output}</h4>
           <h4>State</h4>
           
           {output && (
