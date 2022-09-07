@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Container, Button, Spinner } from "react-bootstrap";
+import { PipelineBuilder } from "../../src/utils/Pipeline"
 import axios from "axios";
-import QualityChecker from "../utils/QualityChecker";
-import abbottQualityChecker from "../../src/quality_steps/abbott.json";
+
 
 const Quality = ({uid}) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [quality, setQuality] = useState({});
+  const [result, setResult] = useState(null);
   const fetchData = async () => {
     const res = await axios.get(`/api/inference/${uid}`)
     setData(res.data)
@@ -19,8 +19,10 @@ const Quality = ({uid}) => {
   }, [])
 
   const qualityTest = async () => {
-    const q = await new QualityChecker(data.image, abbottQualityChecker).execute();
-    setQuality(q)
+    const state = { base64: data.image }
+    const pipeline = await PipelineBuilder.loadFromPath("/configs/abbott.json")
+    const quality = await pipeline.execute(state);
+    setResult(quality)
   }
 
   return (
@@ -32,12 +34,10 @@ const Quality = ({uid}) => {
       </>}
       {loading && <Spinner animation="border" />}
       <Button onClick={qualityTest}> test quality</Button>
-      {Object.keys(quality).map((q, idx) => {
+      {result && Object.keys(result.reasons).map((q, idx) => {
         return <div key={idx}>
           <h3>{q}</h3>
-          result: {quality[q].result ? "True" : "False"}
-          <br/>
-          reason: {quality[q].reason}
+          {result.reasons[q].reason}
         </div>
       })}
     </Container>
