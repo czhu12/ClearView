@@ -10,17 +10,18 @@ export default class ORCChecker {
   }
 
   hasWords(text) {
-    return this.words.some(word => this.wordInString(text, word))
+    return this.words.filter(word => this.wordInString(text, word))
   }
 
   async execute(state) {
-    const buffer = Buffer.from(state.image.split(',')[1], "base64")
+    const buffer = Buffer.from(state.base64.split(',')[1], "base64")
     const worker = createWorker();
     await worker.load();
     await worker.loadLanguage('eng');
     await worker.initialize('eng');
     const { data: { text } } = await worker.recognize(buffer);
     await worker.terminate();
-    return {result: this.hasWords(text), reason: ''};
+    const hasWords = this.hasWords(text)
+    return {result: hasWords.length > 0, reason: `Matching words: ${hasWords.join(",")}`};
   }
 }

@@ -5,10 +5,10 @@
       "check": "color",
       "params": {
         "cropParams": {
-          "percentageOfX": 2,
-          "percentageOfY": 20,
-          "width": 50,
-          "height": 50
+          "percentageOfX": 0.5,
+          "percentageOfY": 0.08,
+          "width": 25,
+          "height": 25
         },
         "rgb": {"r": 221, "g": 84, "b": 153},
         "tolerance": 25

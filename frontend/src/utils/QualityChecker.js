@@ -7,8 +7,8 @@ const STEPS = {
 }
 
 export default class QualityChecker {
-  constructor(image, checkJson) {
-    this.image = image;
+  constructor(base64, checkJson) {
+    this.base64 = base64;
     this.steps = checkJson.steps;
     this.quality = {};
   }
