@@ -1,12 +1,12 @@
 import Head from 'next/head'
-import Pipeline, { PipelineBuilder } from '../src/utils/Pipeline';
+import { PipelineBuilder } from '../src/utils/Pipeline';
 import { useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import ToCanvas from '../src/utils/ToCanvas';
-import CropImage from '../src/utils/CropImage';
 
 import styles from '../styles/Home.module.css'
+import Header from '../src/components/Header';
+import { Container } from 'react-bootstrap';
 
 export default function Playground() {
   const [base64, setBase64] = useState("");
@@ -35,18 +35,21 @@ export default function Playground() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <Header />
       <main className="my-5">
-        <h4>Playground</h4>
-        <Form.Control value={base64} onChange={(e) => setBase64(e.target.value)} as="textarea" rows={4} />
-        <div className="mt-2 mb-5">
-          <Button onClick={clicked}>Submit</Button>
-        </div>
+        <Container>
+          <h4>Playground</h4>
+          <Form.Control value={base64} onChange={(e) => setBase64(e.target.value)} as="textarea" rows={4} />
+          <div className="mt-2 mb-5">
+            <Button onClick={clicked}>Submit</Button>
+          </div>
 
-        <h4>Input</h4>
-        <canvas style={{border: "1px solid black"}} height="512" width="512" id="input-canvas"></canvas>
+          <h4>Input</h4>
+          <canvas style={{border: "1px solid black"}} height="512" width="512" id="input-canvas"></canvas>
 
-        <h4>Output</h4>
-        <canvas style={{border: "1px solid black"}} height="512" width="512" id="output-canvas"></canvas>
+          <h4>Output</h4>
+          <canvas style={{border: "1px solid black"}} height="512" width="512" id="output-canvas"></canvas>
+        </Container>
       </main>
     </div>
   )

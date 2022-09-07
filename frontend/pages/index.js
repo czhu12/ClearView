@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Header from '../src/components/Header'
 import Labeling from '../src/devices/Labeling'
 import styles from '../styles/Home.module.css'
 
@@ -12,6 +13,7 @@ export default function Home() {
       </Head>
 
       <main>
+        <Header />
         <Labeling/>
       </main>
     </div>
