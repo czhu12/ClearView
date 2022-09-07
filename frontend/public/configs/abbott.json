@@ -10,6 +10,16 @@
     {
       "name": "CropImage",
       "params": {
+        "percentageOfX": 0.57,
+        "percentageOfY": 0.23,
+        "width": 100,
+        "height": 100,
+        "outputName": "qr_crop"
+      }
+    },
+    {
+      "name": "CropImage",
+      "params": {
         "percentageOfX": 0.37,
         "percentageOfY": 0.23,
         "width": 100,
