@@ -64,6 +64,7 @@ export default class Pipeline {
         results[step.outputName] = { result, reason }
       }
     }
+    console.log(state, results)
     return {result: true, reasons: results };
   }
 }

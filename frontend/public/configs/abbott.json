@@ -33,7 +33,7 @@
         "rgb": {"r": 221, "g": 84, "b": 153},
         "tolerance": 25,
         "outputName": "banner_is_pink",
-        "canvasId": "color_crop"
+        "inputCanvasName": "color_crop"
       }
     },
     {
@@ -41,13 +41,13 @@
       "params": {
         "words": ["Binax", "NOW", "COVID-19", "Ag", "CARD"],
         "outputName": "has_correct_text",
-        "canvasId": "device_crop"
+        "inputCanvasName": "device_crop"
       }
     },
     {
       "name": "CropImage",
       "params": {
-        "percentageOfX": 0.57,
+        "percentageOfX": 0.55,
         "percentageOfY": 0.23,
         "width": 100,
         "height": 100,
@@ -58,7 +58,9 @@
       "name": "QRChecker",
       "params": {
         "inputCanvasName": "qr_crop",
-        "regex": ".*"
+        "regex": ".*",
+        "outputName": "qr_check",
+        "supportedFormats": ["data_matrix"]
       }
     },
     {

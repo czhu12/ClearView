@@ -1,8 +1,9 @@
 export default class QRChecker {
-  constructor({supportedFormats, inputCanvasName, regex}) {
+  constructor({supportedFormats, inputCanvasName, regex, outputName}) {
     this.supportedFormats = supportedFormats;
     this.inputCanvasName = inputCanvasName;
     this.regex = regex;
+    this.outputName = outputName;
   }
 
   async execute(state) {
@@ -10,9 +11,11 @@ export default class QRChecker {
     if (!supportedFormats) {
       supportedFormats = await window.BarcodeDetector.getSupportedFormats();
     }
+
     let barcodeDetector = new window.BarcodeDetector({ formats: supportedFormats });
     const canvas = state[this.inputCanvasName];
     let detector = await barcodeDetector.detect(canvas);
+    debugger
     if (detector.length > 0) {
       state.code = detector[0].rawValue;
       return {

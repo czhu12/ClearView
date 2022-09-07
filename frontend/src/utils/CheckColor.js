@@ -1,8 +1,8 @@
 export default class CheckColor {
-  constructor({rgb, tolerance, canvasId, outputName}) {
+  constructor({rgb, tolerance, inputCanvasName, outputName}) {
     this.rgb = rgb;
     this.tolerance = tolerance;
-    this.canvasId = canvasId;
+    this.inputCanvasName = inputCanvasName;
     this.outputName = outputName;
   }
 
@@ -17,7 +17,7 @@ export default class CheckColor {
   }
 
   async execute(state) {
-    const canvas = state[this.canvasId];
+    const canvas = state[this.inputCanvasName];
     const averageRGB = await this.getAverageRGB(canvas);
     return {
       result: this.withinTolerance(averageRGB),
