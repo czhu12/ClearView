@@ -15,7 +15,6 @@ export default class QRChecker {
     let barcodeDetector = new window.BarcodeDetector({ formats: supportedFormats });
     const canvas = state[this.inputCanvasName];
     let detector = await barcodeDetector.detect(canvas);
-    debugger
     if (detector.length > 0) {
       state.code = detector[0].rawValue;
       return {
