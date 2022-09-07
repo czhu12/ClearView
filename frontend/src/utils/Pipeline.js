@@ -1,8 +1,10 @@
 import axios from "axios";
 import ToCanvas from "./ToCanvas";
 import CropImage from "./CropImage";
-import ColorChecker from "./ColorChecker";
+import CheckColor from "./CheckColor";
+import CheckText from "./CheckText";
 import QRChecker from "./QRChecker";
+
 
 class PipelineError extends Error {
   constructor(message) {
@@ -27,12 +29,14 @@ export class PipelineBuilder {
       const step = this.config.steps[i];
       if (step.name === "CropImage") {
         steps.push(new CropImage(step.params));
-      } else if (step.name === "ColorChecker") {
-        steps.push(new ColorChecker(step.params));
+      } else if (step.name === "CheckColor") {
+        steps.push(new CheckColor(step.params));
       } else if (step.name === "QRChecker") {
         steps.push(new QRChecker(step.params));
       } else if (step.name === "ToCanvas") {
         steps.push(new ToCanvas(step.params));
+      } else if (step.name === "CheckText") {
+        steps.push(new CheckText(step.params));
       }
     }
 
@@ -47,13 +51,19 @@ export default class Pipeline {
   }
 
   async execute(state) {
+    const results = {}
     for (let i = 0; i < this.steps.length; i++) {
       const step = this.steps[i];
       const { result, reason } = await step.execute(state, this);
+
       if (!result) {
         throw new PipelineError(reason);
       }
+
+      if (step.outputName) {
+        results[step.outputName] = { result, reason }
+      }
     }
-    return {result: true, reason: null};
+    return {result: true, reasons: results };
   }
 }

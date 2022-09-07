@@ -1,8 +1,9 @@
 import { createWorker } from 'tesseract.js';
 
-export default class ORCChecker {
-  constructor({ words }) {
+export default class CheckText {
+  constructor({ words, outputName }) {
     this.words = words;
+    this.outputName = outputName;
   }
 
   wordInString(text, word) {

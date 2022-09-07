@@ -10,6 +10,32 @@
     {
       "name": "CropImage",
       "params": {
+        "percentageOfX": 0.5,
+        "percentageOfY": 0.08,
+        "width": 25,
+        "height": 25,
+        "outputName": "color_crop"
+      }
+    },
+    {
+      "name": "CheckColor",
+      "params": {
+        "rgb": {"r": 221, "g": 84, "b": 153},
+        "tolerance": 25,
+        "outputName": "banner_is_pink",
+        "canvasId": "color_crop"
+      }
+    },
+    {
+      "name": "CheckText",
+      "params": {
+        "words": ["Binax", "NOW", "COVID-19", "Ag", "CARD"],
+        "outputName": "has_correct_text"
+      }
+    },
+    {
+      "name": "CropImage",
+      "params": {
         "percentageOfX": 0.57,
         "percentageOfY": 0.23,
         "width": 100,
