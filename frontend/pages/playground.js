@@ -1,4 +1,6 @@
 import Head from 'next/head'
+import ReactJson from 'react-json-view'
+
 import { PipelineBuilder } from '../src/utils/Pipeline';
 import { useState } from 'react'
 import Button from 'react-bootstrap/Button';
@@ -10,6 +12,7 @@ import { Container } from 'react-bootstrap';
 
 export default function Playground() {
   const [base64, setBase64] = useState("");
+  const [output, setOutput] = useState(null);
   const clicked = async () => {
     const state = { base64 }
     const pipeline = await PipelineBuilder.loadFromPath("/configs/abbott.json")
@@ -23,7 +26,8 @@ export default function Playground() {
       image.src = base64;
 
       const context = document.getElementById('output-canvas').getContext('2d');
-      context.drawImage(state['qr_crop'], 0, 0);
+      context.drawImage(state['result_crop'], 0, 0);
+      setOutput(state);
     }
   }
 
@@ -49,6 +53,11 @@ export default function Playground() {
 
           <h4>Output</h4>
           <canvas style={{border: "1px solid black"}} height="512" width="512" id="output-canvas"></canvas>
+          <h4>State</h4>
+          
+          {output && (
+            <ReactJson src={output} />
+          )}
         </Container>
       </main>
     </div>

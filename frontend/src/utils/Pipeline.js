@@ -2,6 +2,7 @@ import axios from "axios";
 import ToCanvas from "./ToCanvas";
 import CropImage from "./CropImage";
 import ColorChecker from "./ColorChecker";
+import QRChecker from "./QRChecker";
 
 class PipelineError extends Error {
   constructor(message) {
@@ -28,6 +29,8 @@ export class PipelineBuilder {
         steps.push(new CropImage(step.params));
       } else if (step.name === "ColorChecker") {
         steps.push(new ColorChecker(step.params));
+      } else if (step.name === "QRChecker") {
+        steps.push(new QRChecker(step.params));
       } else if (step.name === "ToCanvas") {
         steps.push(new ToCanvas(step.params));
       }
