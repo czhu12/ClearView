@@ -31,7 +31,7 @@
       "name": "CheckColor",
       "params": {
         "rgb": {"r": 221, "g": 84, "b": 153},
-        "tolerance": 25,
+        "tolerance": 32,
         "outputName": "banner_is_pink",
         "inputCanvasName": "color_crop"
       }
