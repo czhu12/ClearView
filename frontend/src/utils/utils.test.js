@@ -1,8 +1,9 @@
 import CheckColor from "./CheckColor"
 import Pipeline from "./Pipeline";
-import { RED_IMAGE } from "./testConstants";
+import { RED_IMAGE, WORD_IMAGE } from "./testConstants";
 import CropImage from "./CropImage";
 import ToCanvas from "./ToCanvas";
+import CheckText from "./CheckText";
 
 test('ToCanvas', async () => {
   const state = { base64: RED_IMAGE };
@@ -28,11 +29,10 @@ test('CropImage', async () => {
     }),
   ]);
 
-  const { result, reason } = await pipeline.execute(state);
+  const { result, reasons } = await pipeline.execute(state);
   expect(result).toEqual(true);
   expect(!!state.cropped).toEqual(true);
 });
-
 
 test('CheckColor', async () => {
   const state = { base64: RED_IMAGE };
@@ -53,7 +53,30 @@ test('CheckColor', async () => {
     }),
   ]);
 
-  const { result, reason } = await pipeline.execute(state);
+  const { result, reasons } = await pipeline.execute(state);
   expect(result).toEqual(true);
   expect(!!state.color_crop).toEqual(true);
+});
+
+test('CheckText', async () => {
+  const state = { base64: WORD_IMAGE };
+  const pipeline = new Pipeline([
+    new ToCanvas({width: 200, height: 50}),
+    new CropImage({
+      percentageOfX: 0,
+      percentageOfY: 0,
+      width: 111,
+      height: 48,
+      outputName: "word_crop"
+    }),
+    new CheckText({
+      words: ["CARD", "COVID-19", "Ag"],
+      outputName: "word_check",
+      inputCanvasName: "word_crop"
+    }),
+  ]);
+
+  const { result, reasons } = await pipeline.execute(state);
+  expect(result).toEqual(true);
+  expect(reasons.word_check.reason).toEqual("Matching words: CARD,COVID-19,Ag");
 });
