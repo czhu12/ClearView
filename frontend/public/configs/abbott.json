@@ -1,0 +1,21 @@
+{
+  "steps": [
+    {
+      "name": "ToCanvas",
+      "params": {
+        "width": 512,
+        "height": 512
+      }
+    },
+    {
+      "name": "CropImage",
+      "params": {
+        "percentageOfX": 0.37,
+        "percentageOfY": 0.23,
+        "width": 100,
+        "height": 100,
+        "outputName": "result_crop"
+      }
+    }
+  ]
+}

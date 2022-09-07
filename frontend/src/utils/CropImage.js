@@ -1,11 +1,12 @@
 import { createCanvas } from 'canvas';
 
 export default class CropImage {
-  constructor({percentageOfX, percentageOfY, width, height}) {
+  constructor({percentageOfX, percentageOfY, width, height, outputName}) {
     this.percentageOfX = percentageOfX;
     this.percentageOfY = percentageOfY;
     this.width = width;
     this.height = height;
+    this.outputName = outputName;
   }
 
   async execute(state) {
@@ -19,7 +20,7 @@ export default class CropImage {
     const newCanvas = createCanvas(this.width, this.height);
     const newContext = newCanvas.getContext('2d');
     newContext.putImageData(imageData, 0, 0);
-    state.canvas = newCanvas;
+    state[this.outputName] = newCanvas;
     return { result: true, reason: null }
   }
 }

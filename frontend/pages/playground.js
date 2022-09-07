@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import Pipeline from '../src/utils/Pipeline';
+import Pipeline, { PipelineBuilder } from '../src/utils/Pipeline';
 import { useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -11,15 +11,19 @@ import styles from '../styles/Home.module.css'
 export default function Playground() {
   const [base64, setBase64] = useState("");
   const clicked = async () => {
-    const state = {base64}
-    const pipeline = new Pipeline([
-      new ToCanvas(512, 512),
-      new CropImage({percentageOfX: .5, percentageOfY: .5, width: 100, height: 100})
-    ]);
+    const state = { base64 }
+    const pipeline = await PipelineBuilder.loadFromPath("/configs/abbott.json")
     const { result, reason } = await pipeline.execute(state);
     if (result) {
+      const inputContext = document.getElementById('input-canvas').getContext('2d');
+      var image = new Image();
+      image.onload = function () {
+        inputContext.drawImage(image, 0, 0);
+      };
+      image.src = base64;
+
       const context = document.getElementById('output-canvas').getContext('2d');
-      context.drawImage(state.canvas, 0, 0);
+      context.drawImage(state['qr_crop'], 0, 0);
     }
   }
 
@@ -37,6 +41,9 @@ export default function Playground() {
         <div className="mt-2 mb-5">
           <Button onClick={clicked}>Submit</Button>
         </div>
+
+        <h4>Input</h4>
+        <canvas style={{border: "1px solid black"}} height="512" width="512" id="input-canvas"></canvas>
 
         <h4>Output</h4>
         <canvas style={{border: "1px solid black"}} height="512" width="512" id="output-canvas"></canvas>

@@ -142,7 +142,7 @@ const Labeling = () => {
               <div className="clearfix"></div>
             </div>
             <Button
-              className="btn-block"
+              className="btn-block w-100"
               onClick={() => {
                 capture();
               }}

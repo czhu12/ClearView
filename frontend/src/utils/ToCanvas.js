@@ -1,6 +1,6 @@
 import { createCanvas, loadImage } from "canvas";
 export default class ToCanvas {
-  constructor(width, height) {
+  constructor({width, height}) {
     this.width = width;
     this.height = height;
   }

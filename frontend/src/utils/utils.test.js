@@ -6,7 +6,7 @@ import ToCanvas from "./ToCanvas";
 
 test('ToCanvas', async () => {
   const state = { base64: RED_IMAGE };
-  const toCanvas = new ToCanvas(512, 512);
+  const toCanvas = new ToCanvas({width: 512, height: 512});
   const { result, reason } = await toCanvas.execute(state);
   expect(result).toEqual(true);
   expect(!!state.canvas).toEqual(true);
@@ -18,7 +18,7 @@ test('ToCanvas', async () => {
 test('CropImage', async () => {
   const state = { base64: RED_IMAGE };
   const pipeline = new Pipeline([
-    new ToCanvas(512, 512),
+    new ToCanvas({width: 512, height: 512}),
     new CropImage({
       percentageOfX: 0,
       percentageOfY: 0,
