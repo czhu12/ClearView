@@ -1,0 +1,69 @@
+{
+  "steps": [
+    {
+      "name": "ToCanvas",
+      "params": {
+        "width": 512,
+        "height": 512,
+        "rotate": 180
+      }
+    },
+    {
+      "name": "CropImage",
+      "params": {
+        "percentageOfX": 0.03,
+        "percentageOfY": 0.37,
+        "width": 480,
+        "height": 140,
+        "outputName": "device_crop"
+      }
+    },
+    {
+      "name": "CropImage",
+      "params": {
+        "percentageOfX": 0.27,
+        "percentageOfY": 0.48,
+        "width": 25,
+        "height": 25,
+        "outputName": "color_crop"
+      }
+    },
+    {
+      "name": "CheckColor",
+      "params": {
+        "rgb": {"r": 221, "g": 98, "b": 63},
+        "tolerance": 30,
+        "outputName": "banner_has_orange",
+        "inputCanvasName": "color_crop"
+      }
+    },
+    {
+      "name": "CropImage",
+      "params": {
+        "percentageOfX": 0.7,
+        "percentageOfY": 0.4,
+        "width": 300,
+        "height": 120,
+        "outputName": "text_crop"
+      }
+    },
+    {
+      "name": "CheckText",
+      "params": {
+        "words": ["Drops"],
+        "outputName": "has_correct_text",
+        "inputCanvasName": "text_crop"
+      }
+    },
+    {
+      "name": "CropImage",
+      "params": {
+        "percentageOfX": 0.42,
+        "percentageOfY": 0.41,
+        "width": 90,
+        "height": 90,
+        "outputName": "result_crop"
+      }
+    }
+  ]
+}

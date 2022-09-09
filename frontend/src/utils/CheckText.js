@@ -1,9 +1,10 @@
 import { createWorker } from 'tesseract.js';
 
 export default class CheckText {
-  constructor({ words, outputName }) {
+  constructor({ words, outputName, inputCanvasName }) {
     this.words = words;
     this.outputName = outputName;
+    this.inputCanvasName = inputCanvasName;
   }
 
   wordInString(text, word) {
@@ -15,7 +16,7 @@ export default class CheckText {
   }
 
   async execute(state) {
-    const buffer = Buffer.from(state.base64.split(',')[1], "base64")
+    const buffer = Buffer.from(state[this.inputCanvasName].toDataURL().split(',')[1], "base64")
     const worker = createWorker();
     await worker.load();
     await worker.loadLanguage('eng');
