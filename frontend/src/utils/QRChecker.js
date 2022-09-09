@@ -1,4 +1,5 @@
 export default class QRChecker {
+  static name = 'QRChecker';
   constructor({supportedFormats, inputCanvasName, regex, outputName}) {
     this.supportedFormats = supportedFormats;
     this.inputCanvasName = inputCanvasName;

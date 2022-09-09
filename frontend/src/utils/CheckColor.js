@@ -1,4 +1,5 @@
 export default class CheckColor {
+  static name = 'CheckColor';
   constructor({rgb, tolerance, inputCanvasName, outputName}) {
     this.rgb = rgb;
     this.tolerance = tolerance;

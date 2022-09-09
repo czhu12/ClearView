@@ -1,6 +1,7 @@
 import { createCanvas } from 'canvas';
 
 export default class CropImage {
+  static name = 'CropImage';
   constructor({percentageOfX, percentageOfY, width, height, outputName}) {
     this.percentageOfX = percentageOfX;
     this.percentageOfY = percentageOfY;

@@ -1,5 +1,6 @@
 import { createCanvas, loadImage } from "canvas";
 export default class ToCanvas {
+  static name = 'ToCanvas';
   constructor({width, height, rotate = null}) {
     this.width = width;
     this.height = height;

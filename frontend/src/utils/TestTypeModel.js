@@ -6,6 +6,7 @@ const TEST_TYPE_MAP = {
 }
 
 export default class TestTypeModel {
+  static name = 'TestTypeModel';
   constructor({modelPath, inputName}) {
     this.visionModel = new VisionModel(modelPath);
     this.inputName = inputName;

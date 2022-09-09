@@ -12,22 +12,6 @@ const argmax = (array) => {
   return arg;
 }
 
-async function runModel(inputData) {
-  try {
-    // create a new session and load the AlexNet model.
-    const session = await ort.InferenceSession.create(
-      '/models/test_type.onnx',
-    );
-    const feeds = { input: inputData };
-
-    // feed inputs and run
-    const results = await session.run(feeds);
-    return argmax(results.output.data);
-  } catch (e) {
-    console.log(e);
-  }
-}
-
 function processImage(originalCanvas, size) {
   const canvas = createCanvas(size, size);
   const context = canvas.getContext("2d");
@@ -65,14 +49,35 @@ const SIZE = 224;
 const DIMS = [1, 3, SIZE, SIZE];
 export default class VisionModel {
   constructor(modelPath) {
+    this.session = null;
     this.modelPath = modelPath;
   }
 
   async predict(canvas) {
     const resizedImageData = processImage(canvas, SIZE);
     const inputTensor = imageDataToTensor(resizedImageData, DIMS);
-    const prediction = await runModel(inputTensor);
+    debugger;
+    const prediction = await this.runModel(inputTensor);
     console.log(prediction);
     return prediction;
   }
+
+  async runModel(inputData) {
+    try {
+      // create a new session and load the AlexNet model.
+      if (!this.session) {
+        this.session = await ort.InferenceSession.create(
+          '/models/test_type.onnx',
+        );
+      }
+      const feeds = { input: inputData };
+
+      // feed inputs and run
+      const results = await this.session.run(feeds);
+      return argmax(results.output.data);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
 }
