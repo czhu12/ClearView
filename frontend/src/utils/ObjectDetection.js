@@ -2,6 +2,7 @@
 import { createCanvas, loadImage } from 'canvas';
 
 export default class ObjectDetection {
+  static name = 'ObjectDetection';
   constructor({ outputName, inputCanvasName }) {
     this.outputName = outputName;
     this.inputCanvasName = inputCanvasName;

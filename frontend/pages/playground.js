@@ -43,7 +43,7 @@ export default function Playground() {
 
       <Header />
       <main className="my-5">
-        <script async src="https://www.cdnpkg.com/opencv-copy/file/opencv.js" type="text/javascript"></script>
+        <script async src="https://docs.opencv.org/3.4/opencv.js" type="text/javascript"></script>
         <Container>
           <h4>Playground</h4>
           <Form.Control value={base64} onChange={(e) => setBase64(e.target.value)} as="textarea" rows={4} />

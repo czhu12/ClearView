@@ -13,7 +13,7 @@ export default function Home() {
       <Header />
 
       <main>
-      <script async src="https://www.cdnpkg.com/opencv-copy/file/opencv.js" type="text/javascript"></script>
+      <script async src="https://docs.opencv.org/3.4/opencv.js" type="text/javascript"></script>
        <Quality uid={query.uid} />
       </main>
     </div>
