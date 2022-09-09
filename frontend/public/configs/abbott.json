@@ -79,6 +79,13 @@
         "modelPath": "/models/test_type.onnx",
         "inputName": "result_crop"
       }
+    },
+    {
+      "name": "ObjectDetection",
+      "params": {
+        "inputCanvasName": "result_crop",
+        "outputName": "result_detection"
+      }
     }
   ]
 }
