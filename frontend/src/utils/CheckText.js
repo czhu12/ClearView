@@ -24,6 +24,7 @@ export default class CheckText {
     const { data: { text } } = await worker.recognize(buffer);
     await worker.terminate();
     const hasWords = this.hasWords(text)
+    state.matchingWords = hasWords;
     return {result: hasWords.length > 0, reason: `Matching words: ${hasWords.join(",")}`};
   }
 }
