@@ -5,11 +5,13 @@
     },
     "test_type": {
       "dataset": "data/{version}/test_type/",
-      "model_path": "output/{version}/models/test_type.pt"
+      "model_path": "output/{version}/models/test_type.pt",
+      "onnx_path": "frontend/public/models/test_type.onnx"
     },
     "quality": {
       "dataset": "data/{version}/quality/{test_type}/",
-      "model_path": "output/{version}/models/quality-{test_type}.pt"
+      "model_path": "output/{version}/models/quality-{test_type}.pt",
+      "onnx_path": "frontend/public/models/quality-{test_type}.onnx"
     }
   },
   "inference": {

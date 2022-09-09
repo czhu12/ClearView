@@ -10,6 +10,7 @@ import Form from 'react-bootstrap/Form';
 import styles from '../styles/Home.module.css'
 import Header from '../src/components/Header';
 import { Container } from 'react-bootstrap';
+import { runModel } from '../src/utils/VisionModel';
 
 export default function Playground() {
   const [base64, setBase64] = useState("");
@@ -60,6 +61,12 @@ export default function Playground() {
           {output && (
             <ReactJson src={output} />
           )}
+          <Button onClick={async () => {
+            const result = await runModel();
+            console.log(result);
+          }}>
+            Run Model
+          </Button>
         </Container>
       </main>
     </div>

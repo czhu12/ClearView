@@ -59,6 +59,13 @@
         "height": 100,
         "outputName": "result_crop"
       }
+    },
+    {
+      "name": "TestTypeModel",
+      "params": {
+        "modelPath": "/models/test_type.onnx",
+        "inputName": "result_crop"
+      }
     }
   ]
 }

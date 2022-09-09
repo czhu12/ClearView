@@ -21,20 +21,20 @@ try:
 except:
     device = "cpu"
 
-class ResnetImageInferenceModel(nn.Module):
+class ImageInferenceModel(nn.Module):
     @staticmethod
     def load_from(path=None, classes=2):
-        model_ft = models.mobilenet_v3_small(pretrained=True)
-        model_ft.classifier[-1] = nn.Linear(in_features=1024, out_features=2, bias=True)
-        model = ResnetImageInferenceModel(model_ft)
+        model = ImageInferenceModel(num_classes=classes)
         if path:
             print("Loading model from {}".format(path))
             model.load_state_dict(torch.load(path))
         return model
 
-    def __init__(self, model):
+    def __init__(self, num_classes=2):
         super().__init__()
-        self.model = model
+ 
+        self.encoder = models.squeezenet.squeezenet1_1(pretrained=True)
+        self.decoder = nn.Linear(1000, num_classes)
         self.transform = transforms.Compose([
             transforms.Resize((224, 224), Image.BILINEAR),
             transforms.ToTensor(),
@@ -42,7 +42,7 @@ class ResnetImageInferenceModel(nn.Module):
         ])
 
     def forward(self, x):
-        return self.model(x)
+        return self.decoder(self.encoder(x))
         
     def predict_image(self, image_path, threshold=0.5):
         image = Image.open(image_path)
@@ -87,7 +87,16 @@ class ImageDataset(Dataset):
         
         return image, y
 
-def train_model(model, criterion, optimizer, scheduler, image_datasets, model_path, num_epochs=25, restart=False):
+def train_model(
+    model,
+    criterion,
+    optimizer,
+    scheduler,
+    image_datasets,
+    model_path,
+    num_epochs=25,
+    restart=False,
+):
     since = time.time()
     dataloaders = {
         'train': torch.utils.data.DataLoader(image_datasets['train'], batch_size=8, shuffle=True, num_workers=0),

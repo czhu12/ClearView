@@ -1,0 +1,4 @@
+#!/bin/bash
+PYTHONPATH=. python processing/01_download_data.py v1
+PYTHONPATH=. python processing/02_create_datasets.py v1
+PYTHONPATH=. python training/train.py v1
