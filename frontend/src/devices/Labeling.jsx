@@ -24,6 +24,9 @@ const getImageOutline = (testType) => {
   if (testType === "ihealth") {
     return "/images/ihealth/transparent-outline-dotted.png"
   }
+  if (testType === "flowflex") {
+    return "/images/flowflex/transparent-outline-dotted.png"
+  }
 }
 
 const Labeling = () => {
@@ -74,7 +77,13 @@ const Labeling = () => {
   return (
     <Container style={{maxWidth: "560px"}} className="py-4 px-4" id="self-checkout">
       <h4 className="my-3">Select the test type</h4>
-      {[['abbott', '#DC5598'], ['ihealth', '#E54E26']].map(c => {
+      {[
+        ['abbott', '#DC5598'],
+        ['ihealth', '#E54E26'],
+        ['flowflex', '#E54E26'],
+        ['atomo', '#e74c3c'],
+        ['visby', '#9b59b6'],
+      ].map(c => {
         const value = c[0];
         const color = c[1];
         return <CheckboxCard

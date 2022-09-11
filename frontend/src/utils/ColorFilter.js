@@ -41,7 +41,11 @@ export default class ColorFilter {
     const outputCanvas = createCanvas(canvas.width, canvas.height);
     const outputContext = outputCanvas.getContext("2d");
 
-    const red = new Color(255., 100.,151.).normalize();
+    const red = new Color(
+      this.colorTarget[0],
+      this.colorTarget[1],
+      this.colorTarget[2],
+    ).normalize();
     for (let i = 0; i < data.length; i += 4) {
       const color = new Color(data[i], data[i + 1], data[i + 2]);
       const normalized = color.normalize();

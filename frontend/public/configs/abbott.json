@@ -84,7 +84,7 @@
       "name": "ColorFilter",
       "params": {
         "threshold":0.95,
-        "colorTarget": "",
+        "colorTarget": [255, 100, 151],
         "inputCanvasName": "result_crop",
         "outputCanvasName": "red_filtered_result_crop"
       }
