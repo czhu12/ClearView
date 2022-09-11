@@ -56,15 +56,12 @@ export default class VisionModel {
   async predict(canvas) {
     const resizedImageData = processImage(canvas, SIZE);
     const inputTensor = imageDataToTensor(resizedImageData, DIMS);
-    debugger;
     const prediction = await this.runModel(inputTensor);
-    console.log(prediction);
     return prediction;
   }
 
   async runModel(inputData) {
     try {
-      // create a new session and load the AlexNet model.
       if (!this.session) {
         this.session = await ort.InferenceSession.create(
           '/models/test_type.onnx',

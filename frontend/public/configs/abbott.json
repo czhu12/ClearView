@@ -79,6 +79,15 @@
         "modelPath": "/models/test_type.onnx",
         "inputName": "result_crop"
       }
+    },
+    {
+      "name": "ColorFilter",
+      "params": {
+        "threshold":0.95,
+        "colorTarget": "",
+        "inputCanvasName": "result_crop",
+        "outputCanvasName": "red_filtered_result_crop"
+      }
     }
   ]
 }

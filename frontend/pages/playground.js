@@ -10,7 +10,6 @@ import Form from 'react-bootstrap/Form';
 import styles from '../styles/Home.module.css'
 import Header from '../src/components/Header';
 import { Container } from 'react-bootstrap';
-import { runModel } from '../src/utils/VisionModel';
 
 export default function Playground() {
   const [base64, setBase64] = useState("");
@@ -28,7 +27,8 @@ export default function Playground() {
       image.src = base64;
 
       const context = document.getElementById('output-canvas').getContext('2d');
-      context.drawImage(state['result_crop'], 0, 0);
+      context.drawImage(state['result_crop'], 100, 0);
+      context.drawImage(state['red_filtered_result_crop'], 0, 0);
       setOutput(state);
     }
   }
@@ -61,12 +61,6 @@ export default function Playground() {
           {output && (
             <ReactJson src={output} />
           )}
-          <Button onClick={async () => {
-            const result = await runModel();
-            console.log(result);
-          }}>
-            Run Model
-          </Button>
         </Container>
       </main>
     </div>
