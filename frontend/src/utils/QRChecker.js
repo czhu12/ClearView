@@ -20,7 +20,7 @@ export default class QRChecker {
       state.code = detector[0].rawValue;
       return {
         result: new RegExp(this.regex).test(detector[0].rawValue),
-        reason: null,
+        reason: `Matched ${detector[0].rawValue} with ${this.regex}`,
       }
     } else {
       return {

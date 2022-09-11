@@ -57,7 +57,7 @@ export default class Pipeline {
   }
 
   async execute(state) {
-    const results = {}
+    const reasons = {}
     const startTime = (new Date()).getTime();
     const timing = {};
 
@@ -72,12 +72,13 @@ export default class Pipeline {
       }
 
       if (step.outputName) {
-        results[step.outputName] = { result, reason }
+        console.log(step.constructor.name);
+        reasons[step.outputName] = { result, reason }
       }
     }
 
     timing.total = (new Date()).getTime() - startTime;
     state.timing = timing;
-    return { result: true, reasons: results };
+    return { result: true, reasons: reasons };
   }
 }

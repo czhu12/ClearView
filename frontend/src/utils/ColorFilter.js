@@ -25,11 +25,11 @@ class Color {
 }
 
 export default class ColorFilter {
-  constructor({ threshold, colorTarget, inputCanvasName, outputCanvasName }) {
+  constructor({ threshold, colorTarget, inputCanvasName, outputName }) {
     this.colorTarget = colorTarget;
     this.threshold = threshold;
     this.inputCanvasName = inputCanvasName;
-    this.outputCanvasName = outputCanvasName;
+    this.outputName = outputName;
   }
 
   async execute(state) {
@@ -50,7 +50,6 @@ export default class ColorFilter {
       const color = new Color(data[i], data[i + 1], data[i + 2]);
       const normalized = color.normalize();
       const score = normalized.dot(red);
-      console.log(score)
       if (score > this.threshold) {
         data[i] = color.r;     // red
         data[i + 1] = color.g; // green
@@ -62,7 +61,7 @@ export default class ColorFilter {
       }
     }
     outputContext.putImageData(imageData, 0, 0);
-    state[this.outputCanvasName] = outputCanvas;
+    state[this.outputName] = outputCanvas;
     return {
       result: true,
       reason: null,

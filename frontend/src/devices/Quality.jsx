@@ -18,19 +18,17 @@ const Quality = ({uid}) => {
     fetchData();
   }, [])
 
-  const qualityTest = async () => {
+  const calculateQuality = async () => {
     const state = { base64: data.image }
     const pipeline = await PipelineBuilder.loadFromPath(`/configs/${data.metadata.testType}.json`)
-    const quality = await pipeline.execute(state);
-    setResult({reasons: quality.reasons, state})
+    const { result, reasons } = await pipeline.execute(state);
+    setResult({reasons: reasons, state})
   }
 
   const buildStepResult = (q, idx) => {    
     let preview = result.state[q];
-    if (result.state[q]) {
-      if (isCanvas(preview)) {
-        preview = <img src={preview.toDataURL()} />
-      }
+    if (preview && isCanvas(preview)) {
+      preview = <img src={preview.toDataURL()} />
     }
     return (
       <div key={idx}>
@@ -58,7 +56,7 @@ const Quality = ({uid}) => {
       </>}
       {loading
         ? <Spinner animation="border" />
-        : <div><Button onClick={qualityTest} className="w-100 my-2" size="lg" >Calculate quality</Button></div>
+        : <div><Button onClick={calculateQuality} className="w-100 my-2" size="lg" >Calculate quality</Button></div>
       }
       {result && Object.keys(result.reasons).map((q, idx) => buildStepResult(q, idx))}
     </Container>
