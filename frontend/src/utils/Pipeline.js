@@ -68,6 +68,7 @@ export default class Pipeline {
         timing[step.constructor.name] = (new Date()).getTime() - stepStartTime;
 
         if (!result) {
+          reasons[step.outputName] = {result, reason, failed: true}
           throw new PipelineError(reason);
         }
 

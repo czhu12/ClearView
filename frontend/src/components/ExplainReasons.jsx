@@ -11,6 +11,7 @@ export default function ExplainReasons({result}) {
         <h3>{idx + 1}: {titleCase(q)}</h3>
         {result.reasons[q].reason}
         {preview}
+        {result.reasons[q].failed && <div className="text-danger h4">X</div>}
         <hr/>
       </div>
     );

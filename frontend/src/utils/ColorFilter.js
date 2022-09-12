@@ -50,6 +50,7 @@ export default class ColorFilter {
       const color = new Color(data[i], data[i + 1], data[i + 2]);
       const normalized = color.normalize();
       const score = normalized.dot(red);
+      console.log(score);
       if (score > this.threshold) {
         data[i] = color.r;     // red
         data[i + 1] = color.g; // green
@@ -60,6 +61,7 @@ export default class ColorFilter {
         data[i + 2] = 0; // blue
       }
     }
+
     outputContext.putImageData(imageData, 0, 0);
     state[this.outputName] = outputCanvas;
     return {
