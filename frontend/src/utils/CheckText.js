@@ -17,12 +17,13 @@ export default class CheckText {
 
   async execute(state) {
     const buffer = Buffer.from(state[this.inputCanvasName].toDataURL().split(',')[1], "base64")
-    const worker = createWorker();
-    await worker.load();
-    await worker.loadLanguage('eng');
-    await worker.initialize('eng');
-    const { data: { text } } = await worker.recognize(buffer);
-    await worker.terminate();
+    if (!window.tesseractWorker) {
+      window.tesseractWorker = createWorker();
+      await window.tesseractWorker.load();
+      await window.tesseractWorker.loadLanguage('eng');
+      await window.tesseractWorker.initialize('eng');
+    }
+    const { data: { text } } = await window.tesseractWorker.recognize(buffer);
     const hasWords = this.hasWords(text)
     state.matchingWords = hasWords;
     return {result: hasWords.length > 0, reason: `Matching words: ${hasWords.join(",")}`};
