@@ -24,6 +24,61 @@ class Color {
   }
 }
 
+class ImageClustering {
+  constructor(imageData, image) {
+    this.imageData = imageData;
+    this.image = image;
+  }
+
+  execute(){
+    const assigned = {};
+    let currentGroup = 0;
+
+
+    for (let x = 0; x < this.imageData.width; x++){
+      for (let y = 0; y < this.imageData.height; y++) {
+        if (this.image[(x * 4) + (y * (this.imageData.width * 4))] && assigned[x - 1]?.[y]) {
+          // Connected to existing blob
+          if (!assigned[x]) assigned[x] = {}
+          assigned[x][y] = assigned[x - 1][y];
+        } else if (this.image[(x * 4) + (y * (this.imageData.width * 4))] && assigned[x]?.[y - 1]) {
+          // Connected to existing blob
+          if (!assigned[x]) assigned[x] = {}
+          assigned[x][y] = assigned[x][y - 1];
+        } else if (this.image[(x * 4) + (y * (this.imageData.width * 4))]) {
+          // found a new blob
+          currentGroup++;
+          if (!assigned[x]) assigned[x] = {}
+          assigned[x][y] = currentGroup;
+        }
+      }
+    }
+console.log(assigned)
+  
+
+    return {
+      id: 1,
+      aspectRatio: "6:1",
+      numPixels: 100,
+    }
+  }
+
+  aspectRatio(assigned, minY, maxY) {
+    const maxX = Math.max(...Object.keys(assigned))
+    const minX = Math.min(...Object.keys(assigned))
+    return `${maxX - minX}:${maxY - minY}`
+  }
+}
+
+class ResultReader {
+  constructor({ threshold, colorTarget, inputCanvasName, outputName, testType }) {
+    this.r = r;
+    this.g = g;
+    this.b = b;
+  }
+
+}
+
 function getGrouping(imageData, coloredNodes) {
   let groups = 0;
   const checkedColoredNodes = {}
@@ -44,7 +99,7 @@ function getGrouping(imageData, coloredNodes) {
 
     checkedColoredNodes[index].checked = true
     neighbors.map(neighbor => {
-      if (coloredNodes.includes(neighbor) && !checkedColoredNodes[neighbor].checked) {
+      if (checkedColoredNodes[neighbor] && !checkedColoredNodes[neighbor].checked) {
         matches++;
         matches = isSurrounded(neighbor, matches)
       }
@@ -104,6 +159,7 @@ export default class ColorFilter {
     outputContext.putImageData(imageData, 0, 0);
     state[this.outputName] = outputCanvas;
     const numberOfColorGroups = getGrouping(imageData, coloredNodes)
+    new ImageClustering(imageData, data).execute()
     return {
       result: numberOfColorGroups,
       reason: `Number of color groups: ${numberOfColorGroups}`,

@@ -67,12 +67,11 @@ export default class Pipeline {
       const { result, reason } = await step.execute(state, this);
       timing[step.constructor.name] = (new Date()).getTime() - stepStartTime;
 
-      if (!result) {
-        throw new PipelineError(reason);
-      }
+      // if (!result) {
+      //   throw new PipelineError(reason);
+      // }
 
       if (step.outputName) {
-        console.log(step.constructor.name);
         reasons[step.outputName] = { result, reason }
       }
     }

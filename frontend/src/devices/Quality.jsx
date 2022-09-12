@@ -33,13 +33,12 @@ const Quality = ({uid}) => {
     return (
       <div key={idx}>
         <h3>{idx + 1}: {titleCase(q)}</h3>
+        <div>{preview}</div>
         {result.reasons[q].reason}
-        {preview}
         <hr/>
       </div>
     );
   }
-  console.log(result)
 
   return (
     <Container style={{maxWidth: "560px"}} className="py-4 px-4" id="self-checkout">
