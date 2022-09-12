@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Container, Button, Spinner, Badge } from "react-bootstrap";
 import { PipelineBuilder } from "../../src/utils/Pipeline"
 import axios from "axios";
-import { isCanvas, titleCase, BADGES } from "./utils";
+import { BADGES } from "./utils";
+import ExplainReasons from "../components/ExplainReasons";
 
 const Quality = ({uid}) => {
   const [data, setData] = useState(null);
@@ -25,22 +26,6 @@ const Quality = ({uid}) => {
     setResult({reasons: reasons, state});
   }
 
-  const buildStepResult = (q, idx) => {    
-    let preview = result.state[q];
-    if (preview && isCanvas(preview)) {
-      preview = <img src={preview.toDataURL()} />
-    }
-    return (
-      <div key={idx}>
-        <h3>{idx + 1}: {titleCase(q)}</h3>
-        {result.reasons[q].reason}
-        {preview}
-        <hr/>
-      </div>
-    );
-  }
-  console.log(result)
-
   return (
     <Container style={{maxWidth: "560px"}} className="py-4 px-4" id="self-checkout">
       <h3 className="my-3">Image</h3>
@@ -59,7 +44,7 @@ const Quality = ({uid}) => {
         ? <Spinner animation="border" />
         : <div><Button onClick={calculateQuality} className="w-100 my-2" size="lg" >Calculate quality</Button></div>
       }
-      {result && Object.keys(result.reasons).map((q, idx) => buildStepResult(q, idx))}
+      {result && <ExplainReasons result={result} />}
       {result && <h3>Times</h3>}
       {result && Object.keys(result.state.timing).map((t, i) => <div>{i + 1}. {t}: {result.state.timing[t]}</div>)}
     </Container>

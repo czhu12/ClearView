@@ -4,35 +4,36 @@ import styles from '../styles/Home.module.css'
 import Webcam from 'react-webcam';
 import { useEffect, useRef, useState } from 'react';
 import { PipelineBuilder } from '../src/utils/Pipeline';
-import { Container } from 'react-bootstrap';
+import { Button, Container, Form } from 'react-bootstrap';
+import ExplainReasons from '../src/components/ExplainReasons';
 const CAMERA_DIMENSION = 500;
 
 let pipeline;
 export default function Predict() {
+  const [explain, setExplain] = useState(false);
+  const explainRef = useRef(explain)
+  const [result, setResult] = useState(null);
   const webcamRef = useRef(null);
   const initializePipeline = async () => {
     pipeline = await PipelineBuilder.loadFromPath("/configs/abbott.json")
   }
   const makePrediction = async (base64) => {
     const state = { base64 }
-    try {
-      const { result, reason } = await pipeline.execute(state);
-      console.log("Found!");
-    } catch (error) {
-      console.log("Not found");
-    }
+    const { result, reasons } = await pipeline.execute(state);
+    setResult({reasons: reasons, state});
   }
   useEffect(() => {
     if (typeof window !== "undefined") {
       initializePipeline();
       setInterval(() => {
-        if (pipeline) {
+        if (pipeline && webcamRef.current && !explainRef.current) {
           const base64 = webcamRef.current.getScreenshot();
           makePrediction(base64);  
         }
-      }, 1000)
+      }, 3000);
     }
   }, []);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -61,6 +62,31 @@ export default function Predict() {
             />
             <div className="clearfix"></div>
           </div>
+        </div>
+        <div>
+          <Form.Check
+            type="checkbox"
+            label="Explain what happened"
+            onChange={() => {
+              setExplain(!explain)
+              explainRef.current = !explain;
+            }}
+            value={explain}
+          />
+          {explain && (
+            <div>
+              <Button onClick={() => {
+                const base64 = webcamRef.current.getScreenshot();
+                makePrediction(base64);  
+              }}>
+                Capture
+              </Button>
+              <ExplainReasons result={result} />
+              <Button onClick={() => setResult(null)}>
+                Clear
+              </Button>
+            </div>
+          )}
         </div>
       </Container>
     </div>

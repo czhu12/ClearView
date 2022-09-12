@@ -76,7 +76,7 @@ export default class Pipeline {
         }
       }
     } catch(error) {
-      console.log(error);
+      //console.log(error);
     }
 
 
