@@ -39,6 +39,7 @@ const Quality = ({uid}) => {
       </div>
     );
   }
+  console.log(result)
 
   return (
     <Container style={{maxWidth: "560px"}} className="py-4 px-4" id="self-checkout">
@@ -59,6 +60,8 @@ const Quality = ({uid}) => {
         : <div><Button onClick={calculateQuality} className="w-100 my-2" size="lg" >Calculate quality</Button></div>
       }
       {result && Object.keys(result.reasons).map((q, idx) => buildStepResult(q, idx))}
+      {result && <h3>Times</h3>}
+      {result && Object.keys(result.state.timing).map((t, i) => <div>{i + 1}. {t}: {result.state.timing[t]}</div>)}
     </Container>
   );
 }
