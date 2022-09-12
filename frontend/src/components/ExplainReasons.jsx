@@ -8,10 +8,13 @@ export default function ExplainReasons({result}) {
     }
     return (
       <div key={idx}>
-        <h3>{idx + 1}: {titleCase(q)}</h3>
+        <h3>
+          {idx + 1}: {titleCase(q)}
+          {result.reasons[q].failed && <span className="text-danger ml-3">✕</span>}
+          {!result.reasons[q].failed && <span className="text-success ml-3">✓</span>}
+        </h3>
         {result.reasons[q].reason}
         {preview}
-        {result.reasons[q].failed && <div className="text-danger h4">X</div>}
         <hr/>
       </div>
     );
@@ -20,6 +23,8 @@ export default function ExplainReasons({result}) {
   return (
     <div>
       {Object.keys(result.reasons).map((q, idx) => buildStepResult(q, idx))}
+      {result && <h3>Times</h3>}
+      {result && Object.keys(result.state.timing).map((t, i) => <div>{i + 1}. {t}: {result.state.timing[t]}</div>)}
     </div>
   )
 }

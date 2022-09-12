@@ -7,7 +7,9 @@ import ExplainReasons from "../components/ExplainReasons";
 import Select from 'react-select';
 
 const options = [
-  { value: 'abbott', label: 'Abbott' },
+  { value: 'abbott', label: 'Abbott V0.1' },
+  { value: 'abbott-1', label: 'Abbott V0.2' },
+  { value: 'abbott-2', label: 'Abbott V0.1-dl' },
   { value: 'visby', label: 'Visby' },
   { value: 'ihealth', label: 'IHealth' },
 ];
@@ -62,8 +64,6 @@ const Quality = ({uid}) => {
 
 
       {result && <ExplainReasons result={result} />}
-      {result && <h3>Times</h3>}
-      {result && Object.keys(result.state.timing).map((t, i) => <div>{i + 1}. {t}: {result.state.timing[t]}</div>)}
     </Container>
   );
 }

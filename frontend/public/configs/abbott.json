@@ -14,7 +14,7 @@
         "percentageOfY": 0.04,
         "width": 390,
         "height": 500,
-        "outputName": "device_crop"
+        "outputName": "device_detection"
       }
     },
     {
@@ -24,7 +24,7 @@
         "percentageOfY": 0.08,
         "width": 25,
         "height": 25,
-        "outputName": "color_crop"
+        "outputName": "color_detection"
       }
     },
     {
@@ -33,7 +33,7 @@
         "rgb": {"r": 221, "g": 84, "b": 153},
         "tolerance": 100,
         "outputName": "banner_is_pink",
-        "inputCanvasName": "color_crop"
+        "inputCanvasName": "color_detection"
       }
     },
     {
@@ -41,7 +41,7 @@
       "params": {
         "words": ["Binax", "NOW", "COVID-19", "Ag", "CARD"],
         "outputName": "has_correct_text",
-        "inputCanvasName": "device_crop"
+        "inputCanvasName": "device_detection"
       }
     },
     {
@@ -51,7 +51,7 @@
         "percentageOfY": 0.23,
         "width": 125,
         "height": 125,
-        "outputName": "qr_crop"
+        "outputName": "qr_detection"
       }
     },
     {
@@ -61,7 +61,7 @@
         "percentageOfY": 0.23,
         "width": 100,
         "height": 100,
-        "outputName": "result_crop"
+        "outputName": "result_detection"
       }
     },
     {
@@ -69,14 +69,14 @@
       "params": {
         "threshold":0.95,
         "colorTarget": [255, 100, 151],
-        "inputCanvasName": "result_crop",
-        "outputName": "red_filtered_result_crop"
+        "inputCanvasName": "result_detection",
+        "outputName": "red_filtered_result_detection"
       }
     },
     {
       "name": "QRChecker",
       "params": {
-        "inputCanvasName": "qr_crop",
+        "inputCanvasName": "qr_detection",
         "regex": ".*",
         "outputName": "qr_check",
         "supportedFormats": ["data_matrix"]
