@@ -39,13 +39,13 @@ const Labeling = () => {
             md={4}
             sm={6}
             className="my-2 pointer"
-            onClick={() => {
-              window.location = `/web/demo/${d.uid}`;
-            }}>
-            <img src={d.image} height="200"/>
-            <div>
-              {Object.keys(d.metadata).map(k => <Badge className="mx-1" bg={BADGES[k][d.metadata[k]]}>{d.metadata[k]}</Badge> )}
-            </div>
+          >
+            <a href={`/web/demo/${d.uid}`}>
+              <img src={d.image} height="200"/>
+              <div>
+                {Object.keys(d.metadata).map(k => <Badge className="mx-1" bg={BADGES[k][d.metadata[k]]}>{d.metadata[k]}</Badge> )}
+              </div>
+            </a>
           </Col>
         ))}
       </Row>

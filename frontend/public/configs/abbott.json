@@ -31,7 +31,7 @@
       "name": "CheckColor",
       "params": {
         "rgb": {"r": 221, "g": 84, "b": 153},
-        "tolerance": 32,
+        "tolerance": 100,
         "outputName": "banner_is_pink",
         "inputCanvasName": "color_crop"
       }
@@ -49,18 +49,9 @@
       "params": {
         "percentageOfX": 0.55,
         "percentageOfY": 0.23,
-        "width": 100,
-        "height": 100,
+        "width": 125,
+        "height": 125,
         "outputName": "qr_crop"
-      }
-    },
-    {
-      "name": "QRChecker",
-      "params": {
-        "inputCanvasName": "qr_crop",
-        "regex": ".*",
-        "outputName": "qr_check",
-        "supportedFormats": ["data_matrix"]
       }
     },
     {
@@ -80,6 +71,15 @@
         "colorTarget": [255, 100, 151],
         "inputCanvasName": "result_crop",
         "outputName": "red_filtered_result_crop"
+      }
+    },
+    {
+      "name": "QRChecker",
+      "params": {
+        "inputCanvasName": "qr_crop",
+        "regex": ".*",
+        "outputName": "qr_check",
+        "supportedFormats": ["data_matrix"]
       }
     }
   ]

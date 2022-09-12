@@ -22,7 +22,7 @@ const Quality = ({uid}) => {
     const state = { base64: data.image }
     const pipeline = await PipelineBuilder.loadFromPath(`/configs/${data.metadata.testType}.json`)
     const { result, reasons } = await pipeline.execute(state);
-    setResult({reasons: reasons, state})
+    setResult({reasons: reasons, state});
   }
 
   const buildStepResult = (q, idx) => {    

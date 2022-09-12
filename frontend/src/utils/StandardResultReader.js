@@ -3,9 +3,6 @@ export default class StandardResultReader {
     this.inputCanvasName = inputCanvasName;
   }
 
-  islandSearch() {
-  }
-
   async execute(state) {
     const canvas = state[this.inputCanvasName];
     const context = canvas.getContext("2d");
