@@ -66,10 +66,9 @@ export default class ColorFilter {
     }
     outputContext.putImageData(imageData, 0, 0);
     state[this.outputName] = outputCanvas;
-    const numberOfColorGroups = new ImageClustering(imageData, coloredNodes).execute();
     return {
-      result: numberOfColorGroups,
-      reason: `Number of color groups: ${numberOfColorGroups}`,
+      result: coloredNodes,
+      reason: "",
     }
   }
 

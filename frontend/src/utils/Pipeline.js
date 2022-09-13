@@ -5,7 +5,7 @@ import CheckColor from "./CheckColor";
 import CheckText from "./CheckText";
 import QRChecker from "./QRChecker";
 import TestTypeModel from "./TestTypeModel";
-import ColorFilter from "./ColorFilter";
+import ResultReader from "./ResultReader";
 
 
 class PipelineError extends Error {
@@ -41,8 +41,8 @@ export class PipelineBuilder {
         steps.push(new TestTypeModel(step.params));
       } else if (step.name === "CheckText") {
         steps.push(new CheckText(step.params));
-      } else if (step.name === "ColorFilter") {
-        steps.push(new ColorFilter(step.params));
+      } else if (step.name === "ResultReader") {
+        steps.push(new ResultReader(step.params));
       }
     }
 
@@ -72,7 +72,6 @@ export default class Pipeline {
       }
 
       if (step.outputName) {
-        console.log(step.constructor.name);
         reasons[step.outputName] = { result, reason }
       }
     }

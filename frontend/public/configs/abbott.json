@@ -74,12 +74,13 @@
       }
     },
     {
-      "name": "ColorFilter",
+      "name": "ResultReader",
       "params": {
         "threshold":0.95,
         "colorTarget": [255, 100, 151],
         "inputCanvasName": "result_crop",
-        "outputName": "red_filtered_result_crop"
+        "outputName": "red_filtered_result_crop",
+        "testType": "abbott"
       }
     }
   ]
