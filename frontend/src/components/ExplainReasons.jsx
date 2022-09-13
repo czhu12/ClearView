@@ -13,8 +13,8 @@ export default function ExplainReasons({result}) {
           {result.reasons[q].failed && <span className="text-danger ml-3">✕</span>}
           {!result.reasons[q].failed && <span className="text-success ml-3">✓</span>}
         </h3>
+        <div>{preview}</div>
         {result.reasons[q].reason}
-        {preview}
         <hr/>
       </div>
     );

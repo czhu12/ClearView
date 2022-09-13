@@ -37,23 +37,24 @@ export default class ImageClustering {
     return matches;
   }
 
-  findRatio(pixels) {
-    const min = Math.min(...pixels),
-          max = Math.max (...pixels),
-          x1  = (min / 4) / this.imageData.width,
-          x2  = (max / 4) / this.imageData.width,
-          y1  = (min / 4) % this.imageData.width,
-          y2  = (max / 4) % this.imageData.width,
-          widthRatio = Math.floor(x2 - x1),
-          heightRatio = Math.floor(y2 - y1);
 
+  findRatio(pixels) {
+    const normalizedPixels = pixels.map(p => p / 4),
+          min = Math.min(...normalizedPixels),
+          max = Math.max(...normalizedPixels),
+          x1  = min % this.imageData.width,
+          x2  = max % this.imageData.width,
+          y1  = Math.floor(min / this.imageData.width),
+          y2  = Math.floor(max / this.imageData.width),
+          widthRatio = x2 - x1,
+          heightRatio = y2 - y1;
     return `${widthRatio}:${heightRatio}`;
   }
 
   execute() {
     let blobCount = 0;
     this.coloredNodes.map(x => this.checkedColoredNodes[x] = false);
-    const blobsById = [];
+    let blobsById = [];
 
     this.coloredNodes.map((coloredNode) => {
       if (this.checkedColoredNodes[coloredNode] == false) {
