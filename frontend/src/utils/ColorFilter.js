@@ -1,4 +1,5 @@
 import { createCanvas } from "canvas";
+import { ImageClustering } from "./ImageClustering";
 
 class Color {
   constructor(r, g, b) {
@@ -22,44 +23,6 @@ class Color {
   normalize() {
     return this.divide(this.magnitude());
   }
-}
-
-function getGrouping(imageData, coloredNodes) {
-  let groups = 0;
-  const checkedColoredNodes = {}
-
-  coloredNodes.map(x => checkedColoredNodes[x] = {checked: false, matches: 0});
-
-  function isSurrounded(index, currentMatches) {
-    let matches = currentMatches;
-    let neighbors = []                             // clear array
-    neighbors[0] = index - imageData.width * 4 - 4 // Upper left
-    neighbors[1] = index - imageData.width * 4     // Upper middle
-    neighbors[2] = index - imageData.width * 4 + 4 // Upper right
-    neighbors[3] = index - 4                       // left
-    neighbors[4] = index + 4                       // right
-    neighbors[5] = index + imageData.width * 4 - 4 // Lower left
-    neighbors[6] = index + imageData.width * 4     // lower middle
-    neighbors[7] = index + imageData.width * 4 + 4 // Lower right
-
-    checkedColoredNodes[index].checked = true
-    neighbors.map(neighbor => {
-      if (coloredNodes.includes(neighbor) && !checkedColoredNodes[neighbor].checked) {
-        matches++;
-        matches = isSurrounded(neighbor, matches)
-      }
-    })
-    return matches;
-  }
-
-  coloredNodes.map((coloredNode) => {
-    if (!checkedColoredNodes[coloredNode].checked) {
-      const matched = isSurrounded(coloredNode, 0);
-      if (matched > 4) groups++                    // More than 4 pixel grouping
-    }
-  });
-
-  return groups
 }
 
 
@@ -103,7 +66,7 @@ export default class ColorFilter {
     }
     outputContext.putImageData(imageData, 0, 0);
     state[this.outputName] = outputCanvas;
-    const numberOfColorGroups = getGrouping(imageData, coloredNodes)
+    const numberOfColorGroups = new ImageClustering(imageData, coloredNodes).execute();
     return {
       result: numberOfColorGroups,
       reason: `Number of color groups: ${numberOfColorGroups}`,
