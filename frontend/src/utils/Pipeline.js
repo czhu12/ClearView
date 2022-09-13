@@ -60,21 +60,26 @@ export default class Pipeline {
     const reasons = {}
     const startTime = (new Date()).getTime();
     const timing = {};
+    try {
+      for (let i = 0; i < this.steps.length; i++) {
+        const step = this.steps[i];
+        const stepStartTime = (new Date()).getTime();
+        const { result, reason } = await step.execute(state, this);
+        timing[step.constructor.name] = (new Date()).getTime() - stepStartTime;
 
-    for (let i = 0; i < this.steps.length; i++) {
-      const step = this.steps[i];
-      const stepStartTime = (new Date()).getTime();
-      const { result, reason } = await step.execute(state, this);
-      timing[step.constructor.name] = (new Date()).getTime() - stepStartTime;
+        if (!result) {
+          reasons[step.outputName] = {result, reason, failed: true}
+          throw new PipelineError(reason);
+        }
 
-      if (!result) {
-        throw new PipelineError(reason);
+        if (step.outputName) {
+          reasons[step.outputName] = { result, reason }
+        }
       }
-
-      if (step.outputName) {
-        reasons[step.outputName] = { result, reason }
-      }
+    } catch(error) {
+      //console.log(error);
     }
+
 
     timing.total = (new Date()).getTime() - startTime;
     state.timing = timing;

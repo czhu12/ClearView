@@ -2,7 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Container, Button, Spinner, Badge } from "react-bootstrap";
 import { PipelineBuilder } from "../../src/utils/Pipeline"
 import axios from "axios";
-import { isCanvas, titleCase, BADGES } from "./utils";
+import { BADGES } from "./utils";
+import ExplainReasons from "../components/ExplainReasons";
+import Select from 'react-select';
+
+const options = [
+  { value: 'abbott', label: 'Abbott V0.1' },
+  { value: 'abbott-1', label: 'Abbott V0.2' },
+  { value: 'abbott-2', label: 'Abbott V0.1-dl' },
+  { value: 'visby', label: 'Visby' },
+  { value: 'ihealth', label: 'IHealth' },
+];
+
 
 const Quality = ({uid}) => {
   const [data, setData] = useState(null);
@@ -14,30 +25,16 @@ const Quality = ({uid}) => {
     setLoading(false);
   }
 
+  const [pipelineConfig, setPipelineConfig] = useState(null);
   useEffect(() => {
     fetchData();
   }, [])
 
   const calculateQuality = async () => {
     const state = { base64: data.image }
-    const pipeline = await PipelineBuilder.loadFromPath(`/configs/${data.metadata.testType}.json`)
+    const pipeline = await PipelineBuilder.loadFromPath(`/configs/${pipelineConfig.value}.json`)
     const { result, reasons } = await pipeline.execute(state);
-    setResult({reasons: reasons, state})
-  }
-
-  const buildStepResult = (q, idx) => {    
-    let preview = result.state[q];
-    if (preview && isCanvas(preview)) {
-      preview = <img src={preview.toDataURL()} />
-    }
-    return (
-      <div key={idx}>
-        <h3>{idx + 1}: {titleCase(q)}</h3>
-        <div>{preview}</div>
-        {result.reasons[q].reason}
-        <hr/>
-      </div>
-    );
+    setResult({reasons: reasons, state});
   }
 
   return (
@@ -46,7 +43,6 @@ const Quality = ({uid}) => {
       {data && <>
         <img src={data.image} height="200"/>
         <div className="my-2">
-        
           {Object.keys(data.metadata).map(k => (
             <Badge className="mx-1" bg={BADGES[k][data.metadata[k]]}>
               {data.metadata[k]}
@@ -56,11 +52,18 @@ const Quality = ({uid}) => {
       </>}
       {loading
         ? <Spinner animation="border" />
-        : <div><Button onClick={calculateQuality} className="w-100 my-2" size="lg" >Calculate quality</Button></div>
+        : <div>
+            <Select
+              value={pipelineConfig}
+              onChange={(value) => setPipelineConfig(value)}
+              options={options}
+            />
+            <Button onClick={calculateQuality} className="w-100 my-2" size="lg" >Calculate quality</Button>
+          </div>
       }
-      {result && Object.keys(result.reasons).map((q, idx) => buildStepResult(q, idx))}
-      {result && <h3>Times</h3>}
-      {result && Object.keys(result.state.timing).map((t, i) => <div>{i + 1}. {t}: {result.state.timing[t]}</div>)}
+
+
+      {result && <ExplainReasons result={result} />}
     </Container>
   );
 }

@@ -64,6 +64,7 @@ export default class ColorFilter {
         data[i + 2] = 0; // blue
       }
     }
+
     outputContext.putImageData(imageData, 0, 0);
     state[this.outputName] = outputCanvas;
     return {

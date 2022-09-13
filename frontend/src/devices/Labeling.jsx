@@ -3,7 +3,6 @@ import React, { useState, useRef, useCallback } from "react";
 import { Container, Button, Form } from "react-bootstrap";
 import axios from 'axios';
 import CheckboxCard from '../components/CheckBoxCard';
-import styles from '../../styles/Devices.module.css'
 import { ToastContainer, toast } from 'react-toastify';
 
 const CAMERA_DIMENSION = 500;
@@ -13,6 +12,7 @@ const toBase64 = file => new Promise((resolve, reject) => {
   reader.onload = () => resolve(reader.result);
   reader.onerror = error => reject(error);
 });
+
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -133,8 +133,8 @@ const Labeling = () => {
         <h3 className="my-5">Hold the test in front of the camera</h3>
         {!imageData && (
           <div className="mb-4" style={{width: "max-content"}}>
-            <div className={styles["camera-wrapper"]}>
-              <div className={styles["camera-image-overlay"]}>
+            <div className="camera-wrapper">
+              <div className="camera-image-overlay">
                 <img src={getImageOutline(testType)} />
               </div>
               <Webcam
