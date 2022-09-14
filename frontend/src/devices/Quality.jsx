@@ -22,6 +22,7 @@ const Quality = ({uid}) => {
   const fetchData = async () => {
     const res = await axios.get(`/api/inference/${uid}`)
     setData(res.data)
+    console.log(res.data)
     setLoading(false);
   }
 

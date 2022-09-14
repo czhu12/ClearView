@@ -1,9 +1,16 @@
 import S3 from "aws-sdk/clients/s3";
+import DynamoDB from "aws-sdk/clients/dynamodb";
 
 export const s3 = new S3({
-  region: process.env.APP_AWS_REGION,
   accessKeyId: process.env.APP_AWS_ACCESS_KEY,
   secretAccessKey: process.env.APP_AWS_SECRET_KEY,
+  region: process.env.APP_AWS_REGION,
+});
+
+export const dynamoDB = new DynamoDB({
+  accessKeyId: process.env.APP_AWS_ACCESS_KEY,
+  secretAccessKey: process.env.APP_AWS_SECRET_KEY,
+  region: process.env.APP_AWS_DB_REGION
 });
 
 export const createKeyPath = (path, key=null) => {
