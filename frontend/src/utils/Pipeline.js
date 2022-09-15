@@ -7,6 +7,7 @@ import QRChecker from "./QRChecker";
 import TestTypeModel from "./TestTypeModel";
 import ColorFilter from "./ColorFilter";
 import ColorNormalizer from "./ColorNormalizer";
+import CannyEdgeDetection from "./CannyEdgeDetection";
 
 
 class PipelineError extends Error {
@@ -46,6 +47,8 @@ export class PipelineBuilder {
         steps.push(new ColorFilter(step.params));
       } else if (step.name === "ColorNormalizer") {
         steps.push(new ColorNormalizer(step.params));
+      } else if (step.name === "CannyEdgeDetection") {
+        steps.push(new CannyEdgeDetection(step.params));
       }
     }
 

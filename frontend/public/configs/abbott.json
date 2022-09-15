@@ -87,6 +87,13 @@
       }
     },
     {
+      "name": "CannyEdgeDetection",
+      "params": {
+        "inputName": "result_detection",
+        "outputName": "canny"
+      }
+    },
+    {
       "name": "QRChecker",
       "params": {
         "inputCanvasName": "qr_detection",
