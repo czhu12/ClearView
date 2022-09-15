@@ -1,6 +1,14 @@
 import { dynamoDB } from './index';
 import AWS from "aws-sdk";
 
+function marshall(item){
+  return AWS.DynamoDB.Converter.marshall(item)
+}
+
+function unmarshall(item){
+  return AWS.DynamoDB.Converter.unmarshall(item)
+}
+
 export class InferenceDynamoDb {
   constructor(){
     this.dynamoDb = new DynamoDbManager("Primaryhealth-inference");
@@ -13,22 +21,23 @@ export class InferenceDynamoDb {
       if (params[key] === undefined) {
         delete params[key];
       }
-    });    
+    });
 
-    const keys = Object.keys(params),
-          expressionAttributes = {};
+    return await this.dynamoDb.scan(params)
+  }
 
-    for (const key of keys) {
-      expressionAttributes[`:${key}`] = params[key];
-    }
+  async create({ testType, quality, createdAt, result, id }) {
+    const params = { testType, quality, createdAt, result, id };
+    const errors = Object.keys(params).filter(x => !params[x]);
 
-    const filterExpression = keys.map(k => `${k} = :${k}`).join(' AND '),
-          expressionAttributeValues = this.dynamoDb.marshall(expressionAttributes);
+    if (errors.length > 0) throw new Error(`Missing params: ${errors.join(", ")}`);
 
-    return await this.dynamoDb.scan(
-      filterExpression,
-      expressionAttributeValues
-    )
+    return await this.dynamoDb.create(params)
+  }
+
+  async delete(id) {
+    if (!id) throw new Error("Missing id");
+    return await this.dynamoDb.delete(id)
   }
 }
 
@@ -37,47 +46,57 @@ class DynamoDbManager {
     this.table = table;
   }
 
-  marshall(item){
-    return AWS.DynamoDB.Converter.marshall(item)
-  }
+  scan(params) {
+    const expressionAttributes = {},
+          keys = Object.keys(params);
 
-  unmarshallItems(items){
-    return items.map(item => AWS.DynamoDB.Converter.unmarshall(item))
-  }
+    for (const key of keys) {
+      expressionAttributes[`:${key}`] = params[key];
+    }
 
-  scan(filterExpression, expressionAttributeValues) {
-    const unmarshallItems = this.unmarshallItems;
+    const filterExpression = keys.map(k => `${k} = :${k}`).join(' AND '),
+          expressionAttributeValues = marshall(expressionAttributes),
+          unmarshallItems = (items) => items.map(x => unmarshall(x));
+
+    const scanParams = {
+      TableName: this.table,
+      FilterExpression: filterExpression,
+      ExpressionAttributeValues: expressionAttributeValues
+    }
+
     return new Promise((resolve, reject) => {
-      const params = {
-        TableName: this.table,
-        FilterExpression: filterExpression,
-        ExpressionAttributeValues: expressionAttributeValues
-      }
-      dynamoDB.scan(params, function (err, data) {
+      dynamoDB.scan(scanParams, function (err, data) {
         if (err) reject(err)
         else resolve(unmarshallItems(data.Items))
       })
     })
   }
-  
-  writeData(item) {
+
+  create(data){
+    const params = {
+      TableName: this.table,
+      Item: marshall(data),
+    }
+
     return new Promise((resolve, reject) => {
-
-      const params = {
-        ReturnValues: 'NONE',
-        TableName: this.table,
-        Item: item
-      }
-
-      this.client.put(params, (err, data) => {
+      dynamoDB.putItem(params, function (err, data) {
         if (err) reject(err)
-        else resolve(data)
+        else resolve(unmarshall(data.Item))
+      })
+    })
+  }
+
+  delete(id) {
+    const params = {
+      TableName: this.table,
+      Key: marshall({id})
+    }
+    return new Promise((resolve, reject) => {
+      dynamoDB.deleteItem(params, function (err, _) {
+        if (err) reject(err)
+        else resolve(id)
       })
     })
   }
   
-  delete() {
-    return true
-  }
-  
-  }
+}

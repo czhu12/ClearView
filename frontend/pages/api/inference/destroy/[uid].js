@@ -1,4 +1,5 @@
 import { s3, imageKey, metadataKey } from "../../../../src/utils";
+import { InferenceDynamoDb } from "../../../../src/utils/DynamoDbManager";
 
 export default async function handler(req, res) {
   const { uid } = req.query
@@ -13,6 +14,8 @@ export default async function handler(req, res) {
         Bucket: process.env.APP_AWS_BUCKET_NAME,
         Key: metadataKey(uid)
       }).promise();
+
+      await new InferenceDynamoDb().delete(uid)
 
       res.status(200).json({message: 'success'})
     } catch {

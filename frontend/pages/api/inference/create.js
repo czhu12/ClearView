@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { s3, imageKey, metadataKey } from "../../../src/utils";
+import { InferenceDynamoDb } from '../../../src/utils/DynamoDbManager';
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
@@ -24,6 +25,9 @@ export default async function handler(req, res) {
         ContentEncoding: 'base64',
         ContentType: 'application/json',
       }).promise();
+
+      const { testType, quality, label: result } = req.body.metadata;
+      await new InferenceDynamoDb().create({id: uid, result, quality, testType, createdAt: Date.now()})
 
       res.status(200).json({message: 'success'})
     } catch {
