@@ -6,6 +6,7 @@ import CheckText from "./CheckText";
 import QRChecker from "./QRChecker";
 import TestTypeModel from "./TestTypeModel";
 import ColorFilter from "./ColorFilter";
+import ColorNormalizer from "./ColorNormalizer";
 
 
 class PipelineError extends Error {
@@ -43,6 +44,8 @@ export class PipelineBuilder {
         steps.push(new CheckText(step.params));
       } else if (step.name === "ColorFilter") {
         steps.push(new ColorFilter(step.params));
+      } else if (step.name === "ColorNormalizer") {
+        steps.push(new ColorNormalizer(step.params));
       }
     }
 

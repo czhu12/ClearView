@@ -21,10 +21,30 @@
       "name": "CropImage",
       "params": {
         "percentageOfX": 0.5,
+        "percentageOfY": 0.6,
+        "width": 50,
+        "height": 50,
+        "outputName": "white_crop"
+      }
+    },
+    {
+      "name": "CropImage",
+      "params": {
+        "percentageOfX": 0.5,
         "percentageOfY": 0.08,
         "width": 25,
         "height": 25,
         "outputName": "color_detection"
+      }
+    },
+    {
+      "name": "ColorNormalizer",
+      "params": {
+        "samples": [
+          {"inputName": "white_crop", "targetColor": [255, 255, 255]}
+        ],
+        "inputName": "canvas",
+        "outputName": "canvas"
       }
     },
     {
@@ -34,14 +54,6 @@
         "tolerance": 100,
         "outputName": "banner_is_pink",
         "inputCanvasName": "color_detection"
-      }
-    },
-    {
-      "name": "CheckText",
-      "params": {
-        "words": ["Binax", "NOW", "COVID-19", "Ag", "CARD"],
-        "outputName": "has_correct_text",
-        "inputCanvasName": "device_detection"
       }
     },
     {
