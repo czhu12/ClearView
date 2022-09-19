@@ -78,12 +78,13 @@
       }
     },
     {
-      "name": "ColorFilter",
+      "name": "ResultReader",
       "params": {
         "threshold":0.95,
         "colorTarget": [255, 100, 151],
+        "testType": "standard",
         "inputCanvasName": "result_detection",
-        "outputName": "red_filtered_result_detection"
+        "outputName": "filtered_result_detection"
       }
     },
     {
