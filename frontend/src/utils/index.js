@@ -10,7 +10,7 @@ export const s3 = new S3({
 export const dynamoDB = new DynamoDB({
   accessKeyId: process.env.APP_AWS_ACCESS_KEY,
   secretAccessKey: process.env.APP_AWS_SECRET_KEY,
-  region: process.env.APP_AWS_DB_REGION
+  region: "us-east-1",
 });
 
 export const createKeyPath = (path, key=null) => {

@@ -26,9 +26,8 @@ export default async function handler(req, res) {
         ContentType: 'application/json',
       }).promise();
 
-      const { testType, quality, label: result } = req.body.metadata;
-      await new InferenceDynamoDb().create({id: uid, result, quality, testType, createdAt: Date.now()})
-
+      const { testType, quality, label } = req.body.metadata;
+      await new InferenceDynamoDb().create({id: uid, label, quality, testType, createdAt: Date.now()})
       res.status(200).json({message: 'success'})
     } catch {
       res.status(401).json({ error: 'Failed to upload' });

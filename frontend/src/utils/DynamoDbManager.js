@@ -14,20 +14,25 @@ export class InferenceDynamoDb {
     this.dynamoDb = new DynamoDbManager("Primaryhealth-inference");
   }
 
-  async query({ testType, quality, createdAt, result, id }){
-    const params = { testType, quality, createdAt, result, id };
+  async query({ testType, quality, label, id }, lastEvaluatedKey, limit=10){
+    const params = { testType, quality, label, id };
 
     Object.keys(params).forEach(key => {
-      if (params[key] === undefined) {
+      if (params[key] === undefined || params[key] === null) {
         delete params[key];
       }
     });
 
-    return await this.dynamoDb.scan(params)
+    return await this.dynamoDb.scan(params, lastEvaluatedKey, limit)
   }
 
-  async create({ testType, quality, createdAt, result, id }) {
-    const params = { testType, quality, createdAt, result, id };
+  async find(id){
+    const data = await this.dynamoDb.scan({id}, null, null);
+    return data.items[0];
+  }
+
+  async create({ testType, label, createdAt, id, quality }) {
+    const params = { testType, quality, label, id, createdAt };
     const errors = Object.keys(params).filter(x => !params[x]);
 
     if (errors.length > 0) throw new Error(`Missing params: ${errors.join(", ")}`);
@@ -46,28 +51,28 @@ class DynamoDbManager {
     this.table = table;
   }
 
-  scan(params) {
-    const expressionAttributes = {},
-          keys = Object.keys(params);
-
-    for (const key of keys) {
-      expressionAttributes[`:${key}`] = params[key];
-    }
-
-    const filterExpression = keys.map(k => `${k} = :${k}`).join(' AND '),
-          expressionAttributeValues = marshall(expressionAttributes),
-          unmarshallItems = (items) => items.map(x => unmarshall(x));
-
+  scan(params, lastEvaluatedKey, limit=10) {
+    const unmarshallItems = (items) => items.map(x => unmarshall(x));
     const scanParams = {
       TableName: this.table,
-      FilterExpression: filterExpression,
-      ExpressionAttributeValues: expressionAttributeValues
     }
+    if (limit) scanParams.Limit = limit
+    if (lastEvaluatedKey) scanParams.ExclusiveStartKey = lastEvaluatedKey
+    if (Object.keys(params).length > 0) {
+      const expressionAttributes = {},
+      keys = Object.keys(params);
 
+      for (const key of keys) {
+        expressionAttributes[`:${key}`] = params[key];
+      }
+
+      scanParams.FilterExpression = keys.map(k => `${k} = :${k}`).join(' AND ');
+      scanParams.ExpressionAttributeValues = marshall(expressionAttributes);
+    }
     return new Promise((resolve, reject) => {
       dynamoDB.scan(scanParams, function (err, data) {
         if (err) reject(err)
-        else resolve(unmarshallItems(data.Items))
+        else resolve({lastEvaluatedKey: data.LastEvaluatedKey, items: unmarshallItems(data.Items)})
       })
     })
   }

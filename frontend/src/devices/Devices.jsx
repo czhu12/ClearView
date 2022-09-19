@@ -2,47 +2,28 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Spinner, Badge } from "react-bootstrap";
 import axios from "axios";
 import { BADGES } from "./utils";
-import Select from 'react-select';
-import Search from "../components/Search";
 
+// TODO: celina-lopez: add filtering
 
 const Labeling = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [continuationKey, setContinuationKey] = useState(null);
-  const [form, setForm] = useState({
-    testType: null,
-    quality: null,
-    result: null,
-    id: null,
-    startAfter: null,
-  });
- 
-  const search = async () => {
-    const params = new URLSearchParams(form)
-    const response = await axios.get(`/api/inference?${params}`);
-    for (let i = 0; i < response.data.uids.length; i++) {
-      const uid = response.data.uids[i]
-      const res = await axios.get(`/api/inference/${uid}`)
-      newData.push({...res.data, uid})
-      setData([...newData])
-    }
-    setLoading(false);
-  }
-
 
   const fetchData = async () => {
     setLoading(true);
-    const response = await axios.get(`/api/inference?startAfter=${continuationKey}`);
-    const originalData = data;
+    const params = {}
+    if (continuationKey) params.lastEvaluatedKey =  continuationKey
+    const response = await axios.post(`/api/inference`, params);
+    const originalData = !!continuationKey ? data : [];
     const newData = [];
-    for (let i = 0; i < response.data.uids.length; i++) {
-      const uid = response.data.uids[i]
-      const res = await axios.get(`/api/inference/${uid}`)
-      newData.push({...res.data, uid})
+    for (let i = 0; i < response.data.items.length; i++) {
+      const metadata = response.data.items[i]
+      const res = await axios.get(`/api/inference/${metadata.id}`)
+      newData.push({...res.data, uid: metadata.id, metadata })
       setData([...originalData, ...newData])
     }
-    setContinuationKey(response.data.startAfter);
+    setContinuationKey(response.data.lastEvaluatedKey);
     setLoading(false);
   }
 
@@ -51,9 +32,9 @@ const Labeling = () => {
   }, [])
 
 
+
   return (
     <Container className="py-4 px-4" id="self-checkout">
-      <Search {...{setForm, form, submit: fetchData}} />
       <h3 className="my-3">Images</h3>
       <Row>
         {data.map(d => (
@@ -67,14 +48,16 @@ const Labeling = () => {
             <a href={`/web/demo/${d.uid}`}>
               <img src={d.image} height="200"/>
               <div>
-                {Object.keys(d.metadata).map(k => <Badge className="mx-1" bg={BADGES[k][d.metadata[k]]}>{d.metadata[k]}</Badge> )}
+                <Badge className="mx-1" bg={BADGES.label[d.metadata.label]}>{d.metadata.label}</Badge>
+                <Badge className="mx-1" bg={BADGES.quality[d.metadata.quality]}>{d.metadata.quality}</Badge>
+                <Badge className="mx-1" bg={BADGES.testType[d.metadata.testType]}>{d.metadata.testType}</Badge>
               </div>
             </a>
           </Col>
         ))}
       </Row>
       {loading && <Spinner animation="border" />}
-      {continuationKey && <Button block onClick={fetchData}>Load more</Button>}
+      {continuationKey && <Button className="w-100 btn-lg" onClick={fetchData}>Load more</Button>}
     </Container>
   );
 }

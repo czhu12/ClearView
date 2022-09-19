@@ -30,7 +30,7 @@ const Search = ({setForm, form, submit}) => {
           options={testTypeOptions}
         />
       </Col>
-      <Col>
+      {/* <Col>
         <Select
           value={qualityOptions.find(option => option.value == form.quality)}
           onChange={handleChange}
@@ -43,9 +43,11 @@ const Search = ({setForm, form, submit}) => {
           onChange={handleChange}
           options={resultOptions}
         />
-      </Col>
+      </Col> */}
       <Col>
-        <Button onClick={submit}>Search</Button>
+        <Button onClick={() => {
+          window.location.href = "?" + new URLSearchParams(form)
+        }}>Search</Button>
       </Col>
     </Row>
   );
