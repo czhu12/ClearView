@@ -6,6 +6,8 @@ import CheckText from "./CheckText";
 import QRChecker from "./QRChecker";
 import TestTypeModel from "./TestTypeModel";
 import ResultReader from "./ResultReader";
+import ColorNormalizer from "./ColorNormalizer";
+import CannyEdgeDetection from "./CannyEdgeDetection";
 
 
 class PipelineError extends Error {
@@ -43,6 +45,10 @@ export class PipelineBuilder {
         steps.push(new CheckText(step.params));
       } else if (step.name === "ResultReader") {
         steps.push(new ResultReader(step.params));
+      } else if (step.name === "ColorNormalizer") {
+        steps.push(new ColorNormalizer(step.params));
+      } else if (step.name === "CannyEdgeDetection") {
+        steps.push(new CannyEdgeDetection(step.params));
       }
     }
 
