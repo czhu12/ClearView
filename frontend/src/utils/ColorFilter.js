@@ -1,4 +1,5 @@
 import { createCanvas } from "canvas";
+import { ImageClustering } from "./ImageClustering";
 
 class Color {
   constructor(r, g, b) {
@@ -24,6 +25,7 @@ class Color {
   }
 }
 
+
 export default class ColorFilter {
   constructor({ threshold, colorTarget, inputCanvasName, outputName }) {
     this.colorTarget = colorTarget;
@@ -37,11 +39,12 @@ export default class ColorFilter {
     const context = canvas.getContext("2d");
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     const data = imageData.data;
+    let coloredNodes = []
 
     const outputCanvas = createCanvas(canvas.width, canvas.height);
     const outputContext = outputCanvas.getContext("2d");
 
-    const red = new Color(
+    const colorTarget = new Color(
       this.colorTarget[0],
       this.colorTarget[1],
       this.colorTarget[2],
@@ -49,11 +52,12 @@ export default class ColorFilter {
     for (let i = 0; i < data.length; i += 4) {
       const color = new Color(data[i], data[i + 1], data[i + 2]);
       const normalized = color.normalize();
-      const score = normalized.dot(red);
+      const score = normalized.dot(colorTarget);
       if (score > this.threshold) {
         data[i] = color.r;     // red
         data[i + 1] = color.g; // green
         data[i + 2] = color.b; // blue
+        coloredNodes.push(i)
       } else {
         data[i] = 0;     // red
         data[i + 1] = 0; // green
@@ -64,8 +68,9 @@ export default class ColorFilter {
     outputContext.putImageData(imageData, 0, 0);
     state[this.outputName] = outputCanvas;
     return {
-      result: true,
-      reason: null,
+      result: coloredNodes,
+      reason: "",
     }
   }
+
 }

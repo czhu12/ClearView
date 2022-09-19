@@ -62,7 +62,17 @@
         "percentageOfY": 0.41,
         "width": 90,
         "height": 90,
-        "outputName": "result_crop"
+        "outputName": "result_detection"
+      }
+    },
+    {
+      "name": "ResultReader",
+      "params": {
+        "threshold":0.95,
+        "colorTarget": [255, 100, 151],
+        "testType": "standard",
+        "inputCanvasName": "result_detection",
+        "outputName": "filtered_result_detection"
       }
     }
   ]

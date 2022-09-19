@@ -16,6 +16,34 @@
         "height": 500,
         "outputName": "device_crop"
       }
+    },
+    {
+      "name": "CheckText",
+      "params": {
+        "words": ["ID", "S", "C", "T", "COVID", "Ag"],
+        "outputName": "has_correct_text",
+        "inputCanvasName": "device_crop"
+      }
+    },
+    {
+      "name": "CropImage",
+      "params": {
+        "percentageOfX": 0.42,
+        "percentageOfY": 0.34,
+        "width": 70,
+        "height": 120,
+        "outputName": "result_detection"
+      }
+    },
+    {
+      "name": "ResultReader",
+      "params": {
+        "threshold":0.99,
+        "colorTarget": [255, 135, 115],
+        "testType": "standard",
+        "inputCanvasName": "result_detection",
+        "outputName": "filtered_result_detection"
+      }
     }
   ]
 }

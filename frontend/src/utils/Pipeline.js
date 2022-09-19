@@ -5,7 +5,7 @@ import CheckColor from "./CheckColor";
 import CheckText from "./CheckText";
 import QRChecker from "./QRChecker";
 import TestTypeModel from "./TestTypeModel";
-import ColorFilter from "./ColorFilter";
+import ResultReader from "./ResultReader";
 import ColorNormalizer from "./ColorNormalizer";
 import CannyEdgeDetection from "./CannyEdgeDetection";
 
@@ -43,8 +43,8 @@ export class PipelineBuilder {
         steps.push(new TestTypeModel(step.params));
       } else if (step.name === "CheckText") {
         steps.push(new CheckText(step.params));
-      } else if (step.name === "ColorFilter") {
-        steps.push(new ColorFilter(step.params));
+      } else if (step.name === "ResultReader") {
+        steps.push(new ResultReader(step.params));
       } else if (step.name === "ColorNormalizer") {
         steps.push(new ColorNormalizer(step.params));
       } else if (step.name === "CannyEdgeDetection") {
