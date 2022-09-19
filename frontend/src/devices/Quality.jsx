@@ -33,8 +33,8 @@ const Quality = ({uid}) => {
   const calculateQuality = async () => {
     const state = { base64: data.image }
     const pipeline = await PipelineBuilder.loadFromPath(`/configs/${pipelineConfig.value}.json`)
-    const { result, reasons } = await pipeline.execute(state);
-    setResult({reasons: reasons, state});
+    const result = await pipeline.execute(state);
+    setResult({...result, state});
   }
 
   return (

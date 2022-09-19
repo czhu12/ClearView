@@ -63,7 +63,7 @@ export default class Pipeline {
   }
 
   async execute(state) {
-    const reasons = {}
+    const outputs = []
     const startTime = (new Date()).getTime();
     const timing = {};
     try {
@@ -74,12 +74,12 @@ export default class Pipeline {
         timing[step.constructor.name + " " + i] = (new Date()).getTime() - stepStartTime;
 
         if (!result) {
-          reasons[step.outputName] = {result, reason, failed: true}
+          outputs.push({ result, reason, failed: true, outputName: step.outputName });
           throw new PipelineError(reason);
         }
 
         if (step.outputName) {
-          reasons[step.outputName] = { result, reason }
+          outputs.push({ result, reason, outputName: step.outputName });
         }
       }
     } catch(error) {
@@ -89,6 +89,6 @@ export default class Pipeline {
 
     timing.total = (new Date()).getTime() - startTime;
     state.timing = timing;
-    return { result: true, reasons: reasons };
+    return { result: true, outputs };
   }
 }
