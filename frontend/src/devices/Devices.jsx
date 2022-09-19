@@ -3,17 +3,39 @@ import { Container, Row, Col, Button, Spinner, Badge } from "react-bootstrap";
 import axios from "axios";
 import { BADGES } from "./utils";
 import Select from 'react-select';
+import Search from "../components/Search";
 
-const Search = () => {
+
+const Labeling = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [continuationKey, setContinuationKey] = useState(null);
   const [form, setForm] = useState({
     testType: null,
     quality: null,
     result: null,
     id: null,
+    startAfter: null,
   });
  
   const search = async () => {
+    const params = new URLSearchParams(form)
+    const response = await axios.get(`/api/inference?${params}`);
+    for (let i = 0; i < response.data.uids.length; i++) {
+      const uid = response.data.uids[i]
+      const res = await axios.get(`/api/inference/${uid}`)
+      newData.push({...res.data, uid})
+      setData([...newData])
+    }
+    setLoading(false);
+  }
+
+
+  const fetchData = async () => {
+    setLoading(true);
     const response = await axios.get(`/api/inference?startAfter=${continuationKey}`);
+    const originalData = data;
+    const newData = [];
     for (let i = 0; i < response.data.uids.length; i++) {
       const uid = response.data.uids[i]
       const res = await axios.get(`/api/inference/${uid}`)
@@ -24,15 +46,14 @@ const Search = () => {
     setLoading(false);
   }
 
+  useEffect(() => {
+    fetchData();
+  }, [])
 
 
   return (
     <Container className="py-4 px-4" id="self-checkout">
-      <Select
-        value={pipelineConfig}
-        onChange={(value) => setPipelineConfig(value)}
-        options={options}
-      />
+      <Search {...{setForm, form, submit: fetchData}} />
       <h3 className="my-3">Images</h3>
       <Row>
         {data.map(d => (
@@ -58,4 +79,4 @@ const Search = () => {
   );
 }
 
-export default Search;
+export default Labeling;
