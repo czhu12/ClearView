@@ -2,17 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Spinner, Badge } from "react-bootstrap";
 import axios from "axios";
 import { BADGES } from "./utils";
+import Select from 'react-select';
 
-const Labeling = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [continuationKey, setContinuationKey] = useState(null);
+const Search = () => {
+  const [form, setForm] = useState({
+    testType: null,
+    quality: null,
+    result: null,
+    id: null,
+  });
  
-  const fetchData = async () => {
-    setLoading(true);
+  const search = async () => {
     const response = await axios.get(`/api/inference?startAfter=${continuationKey}`);
-    const originalData = data;
-    const newData = [];
     for (let i = 0; i < response.data.uids.length; i++) {
       const uid = response.data.uids[i]
       const res = await axios.get(`/api/inference/${uid}`)
@@ -23,13 +24,15 @@ const Labeling = () => {
     setLoading(false);
   }
 
-  useEffect(() => {
-    fetchData();
-  }, [])
 
 
   return (
     <Container className="py-4 px-4" id="self-checkout">
+      <Select
+        value={pipelineConfig}
+        onChange={(value) => setPipelineConfig(value)}
+        options={options}
+      />
       <h3 className="my-3">Images</h3>
       <Row>
         {data.map(d => (
@@ -55,4 +58,4 @@ const Labeling = () => {
   );
 }
 
-export default Labeling;
+export default Search;
