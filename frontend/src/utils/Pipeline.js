@@ -71,7 +71,7 @@ export default class Pipeline {
         const step = this.steps[i];
         const stepStartTime = (new Date()).getTime();
         const { result, reason } = await step.execute(state, this);
-        timing[step.constructor.name] = (new Date()).getTime() - stepStartTime;
+        timing[step.constructor.name + " " + i] = (new Date()).getTime() - stepStartTime;
 
         if (!result) {
           reasons[step.outputName] = {result, reason, failed: true}
