@@ -41,11 +41,18 @@
       "name": "ColorNormalizer",
       "params": {
         "samples": [
-          {"inputName": "white_crop", "targetColor": [255, 255, 255]},
-          {"inputName": "color_detection", "targetColor": [221, 84, 153]}
+          {"inputName": "white_crop", "targetColor": [255, 255, 255]}
         ],
         "inputName": "canvas",
         "outputName": "canvas"
+      }
+    },
+    {
+      "name": "CannyEdgeDetection",
+      "params": {
+        "inputName": "canvas",
+        "outputName": "canny",
+        "blurOutputName": "blur_score"
       }
     },
     {

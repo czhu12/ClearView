@@ -1,9 +1,11 @@
 import { createCanvas } from "canvas";
+import { variance } from "./math";
 
 export default class CannyEdgeDetection {
-  constructor({inputName, outputName}) {
+  constructor({inputName, outputName, blurOutputName}) {
     this.inputName = inputName;
     this.outputName = outputName;
+    this.blurOutputName = blurOutputName;
   }
 
   async execute(state) {
@@ -18,6 +20,11 @@ export default class CannyEdgeDetection {
     cv.Canny(src, dst, 50, 100, 3, false);
     cv.cvtColor(dst, dst, cv.COLOR_GRAY2RGBA, 0);
     let outputData = new ImageData(new Uint8ClampedArray(dst.data), dst.cols, dst.rows);
+
+    if (this.blurOutputName) {
+      state[this.blurOutputName] = variance(outputData.data);
+    }
+
     const outputCanvas = createCanvas(canvas.width, canvas.height);
     outputCanvas.getContext("2d").putImageData(outputData, 0, 0);
     state[this.outputName] = outputCanvas;

@@ -1,4 +1,8 @@
 import { isCanvas, titleCase } from "../devices/utils";
+import dynamic from 'next/dynamic'
+
+const ReactJson = dynamic(() => import('react-json-view'), { ssr: false });
+
 
 export default function ExplainReasons({result}) {
   const buildStepResult = (q, idx) => {    
@@ -25,6 +29,9 @@ export default function ExplainReasons({result}) {
       {Object.keys(result.reasons).map((q, idx) => buildStepResult(q, idx))}
       {result && <h3>Times</h3>}
       {result && Object.keys(result.state.timing).map((t, i) => <div>{i + 1}. {t}: {result.state.timing[t]}</div>)}
+      {result && (
+        <ReactJson src={result.state} />
+      )}
     </div>
   )
 }
