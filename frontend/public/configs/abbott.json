@@ -109,6 +109,14 @@
         "outputName": "qr_check",
         "supportedFormats": ["data_matrix"]
       }
+    },
+    {
+      "name": "TestTypeModel",
+      "params": {
+        "inputCanvasName": "result_detection",
+        "labels": ["negative", "positive", "inconclusive"],
+        "outputLabelName": "cv_prediction"
+      }
     }
   ]
 }

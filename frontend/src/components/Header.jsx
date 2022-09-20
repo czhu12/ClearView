@@ -11,7 +11,6 @@ export default function Header() {
             <Nav.Link href="/">Labeling</Nav.Link>
             <Nav.Link href="/predict">Predict</Nav.Link>
             <Nav.Link href="/web/demo">Data</Nav.Link>
-            <Nav.Link href="/playground">Playground</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

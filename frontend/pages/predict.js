@@ -30,7 +30,7 @@ export default function Predict() {
           const base64 = webcamRef.current.getScreenshot();
           makePrediction(base64);  
         }
-      }, 3000);
+      }, 300);
     }
   }, []);
 

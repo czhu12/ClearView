@@ -23,14 +23,13 @@ export default class ResultReader {
     this.findShapes = CONFIGS[testType].findShapes
   }
 
-  isCorrectShape(ratio){
+  isCorrectShape(ratio) {
     const splitRatio = ratio.split(":").map(str => Number(str))
     const isCorrectShape = CONFIGS[this.testType].findShapes;
     return isCorrectShape(splitRatio[0], splitRatio[1]);
   }
 
-  getResult(blobs){
-
+  getResult(blobs) {
     const shapes = blobs.map(blob => {
       if (this.isCorrectShape(blob.ratio)) return blob
     }).filter(blob => blob);
