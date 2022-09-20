@@ -40,14 +40,12 @@ const Quality = ({uid}) => {
   return (
     <Container style={{maxWidth: "560px"}} className="py-4 px-4" id="self-checkout">
       <h3 className="my-3">Image</h3>
-      {data && <>
-        <img src={data.image} height="200"/>
+      <img src={data?.image} height="200"/>
+      {data?.metadata && <>
         <div className="my-2">
-          {Object.keys(data.metadata).map(k => (
-            <Badge className="mx-1" bg={BADGES[k][data.metadata[k]]}>
-              {data.metadata[k]}
-            </Badge>
-          ))}
+          <Badge className="mx-1" bg={BADGES.label[data.metadata.label]}>{data.metadata.label}</Badge>
+          <Badge className="mx-1" bg={BADGES.quality[data.metadata.quality]}>{data.metadata.quality}</Badge>
+          <Badge className="mx-1" bg={BADGES.testType[data.metadata.testType]}>{data.metadata.testType}</Badge>
         </div>
       </>}
       {loading

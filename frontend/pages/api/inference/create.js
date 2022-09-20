@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { s3, imageKey, metadataKey } from "../../../src/utils";
+import { InferenceDynamoDb } from '../../../src/utils/DynamoDbManager';
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
@@ -25,6 +26,8 @@ export default async function handler(req, res) {
         ContentType: 'application/json',
       }).promise();
 
+      const { testType, quality, label } = req.body.metadata;
+      await new InferenceDynamoDb().create({id: uid, label, quality, testType, createdAt: Date.now()})
       res.status(200).json({message: 'success'})
     } catch {
       res.status(401).json({ error: 'Failed to upload' });
