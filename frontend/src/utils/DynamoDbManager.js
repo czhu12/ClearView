@@ -14,7 +14,7 @@ export class InferenceDynamoDb {
     this.dynamoDb = new DynamoDbManager("Primaryhealth-inference");
   }
 
-  async query({ testType, quality, label, id }, lastEvaluatedKey, limit=10){
+  async query({ testType, quality, label, id }, lastEvaluatedKey){
     const params = { testType, quality, label, id };
 
     Object.keys(params).forEach(key => {
@@ -23,11 +23,11 @@ export class InferenceDynamoDb {
       }
     });
 
-    return await this.dynamoDb.scan(params, lastEvaluatedKey, limit)
+    return await this.dynamoDb.scan(params, lastEvaluatedKey)
   }
 
   async find(id){
-    const data = await this.dynamoDb.scan({id}, null, null);
+    const data = await this.dynamoDb.scan({id});
     return data.items[0];
   }
 
@@ -51,12 +51,11 @@ class DynamoDbManager {
     this.table = table;
   }
 
-  scan(params, lastEvaluatedKey, limit=10) {
+  scan(params, lastEvaluatedKey) {
     const unmarshallItems = (items) => items.map(x => unmarshall(x));
     const scanParams = {
       TableName: this.table,
     }
-    if (limit) scanParams.Limit = limit
     if (lastEvaluatedKey) scanParams.ExclusiveStartKey = lastEvaluatedKey
     if (Object.keys(params).length > 0) {
       const expressionAttributes = {},
