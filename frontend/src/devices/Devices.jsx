@@ -2,28 +2,40 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Spinner, Badge } from "react-bootstrap";
 import axios from "axios";
 import { BADGES } from "./utils";
-
-// TODO: celina-lopez: add filtering
+import Search from "../components/Search";
 
 const Labeling = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [continuationKey, setContinuationKey] = useState(null);
+  const urlParams = new URLSearchParams(window.location.search);
 
   const fetchData = async () => {
     setLoading(true);
     const params = {}
     if (continuationKey) params.lastEvaluatedKey =  continuationKey
-    const response = await axios.post(`/api/inference`, params);
-    const originalData = !!continuationKey ? data : [];
-    const newData = [];
-    for (let i = 0; i < response.data.items.length; i++) {
-      const metadata = response.data.items[i]
-      const res = await axios.get(`/api/inference/${metadata.id}`)
-      newData.push({...res.data, uid: metadata.id, metadata })
-      setData([...originalData, ...newData])
+    if (urlParams.get("testType")) params.testType = urlParams.get("testType")
+    if (urlParams.get("label")) params.label = urlParams.get("label")
+    if (urlParams.get("quality")) params.quality = urlParams.get("quality")
+    
+    const originalData = data
+    const loadedData = originalData.filter(x => x.loaded);
+    const newData = originalData.filter(x => !x.loaded);
+
+    if (newData.length < 10) {
+      const response = await axios.post(`/api/inference`, params);
+      for (let i = 0; i < response.data.items.length; i++) {
+        const metadata = response.data.items[i]
+        newData.push({uid: metadata.id, metadata, loaded: false })
+      }
+      setContinuationKey(response.data.lastEvaluatedKey);
     }
-    setContinuationKey(response.data.lastEvaluatedKey);
+
+    for (let i = 0; i < Math.min(newData.length, 10); i++) {
+      const res = await axios.get(`/api/inference/${newData[i].uid}`)
+      newData[i] = {...newData[i], ...res.data, loaded: true}
+      setData([...loadedData, ...newData])
+    }
     setLoading(false);
   }
 
@@ -32,12 +44,12 @@ const Labeling = () => {
   }, [])
 
 
-
   return (
     <Container className="py-4 px-4" id="self-checkout">
+      <Search />
       <h3 className="my-3">Images</h3>
       <Row>
-        {data.map(d => (
+        {data.filter(x => x.loaded).map(d => (
           <Col
             xs={12}
             lg={3}
@@ -57,7 +69,7 @@ const Labeling = () => {
         ))}
       </Row>
       {loading && <Spinner animation="border" />}
-      {continuationKey && <Button className="w-100 btn-lg" onClick={fetchData}>Load more</Button>}
+      {(continuationKey || data.filter(x => !x.loaded).length > 0) && <Button className="w-100 btn-lg" onClick={fetchData}>Load more</Button>}
     </Container>
   );
 }

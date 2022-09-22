@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {Row, Col, Button } from "react-bootstrap";
 import Select from 'react-select';
 
@@ -12,14 +12,28 @@ const testTypeOptions = createSelectOptions([
   'visby',
 ], "testType")
 
-const qualityOptions = createSelectOptions([
+const labelOptions = createSelectOptions([
   'positive', 'negative', 'inconclusive'
-], "quality")
+], "label")
 
-const resultOptions = createSelectOptions(['good', "bad"], "result");
+const qualityOptions = createSelectOptions(['good', "bad"], "quality");
 
-const Search = ({setForm, form, submit}) => {
+const Search = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const [form, setForm] = useState({
+    testType: urlParams.get('testType'),
+    quality: urlParams.get('quality'),
+    label: urlParams.get('label'),
+  })
   const handleChange = (e) => setForm({...form, [e.name]: e.value})
+
+  const formParams = () => {
+    const params = {}
+    Object.keys(form).map(k => {
+      if (form[k]) params[k] = form[k]
+    });
+    return params;
+  }
 
   return (
     <Row>
@@ -30,7 +44,14 @@ const Search = ({setForm, form, submit}) => {
           options={testTypeOptions}
         />
       </Col>
-      {/* <Col>
+      <Col>
+        <Select
+          value={labelOptions.find(option => option.value == form.label)}
+          onChange={handleChange}
+          options={labelOptions}
+        />
+      </Col>
+      <Col>
         <Select
           value={qualityOptions.find(option => option.value == form.quality)}
           onChange={handleChange}
@@ -38,15 +59,8 @@ const Search = ({setForm, form, submit}) => {
         />
       </Col>
       <Col>
-        <Select
-          value={resultOptions.find(option => option.value == form.result)}
-          onChange={handleChange}
-          options={resultOptions}
-        />
-      </Col> */}
-      <Col>
         <Button onClick={() => {
-          window.location.href = "?" + new URLSearchParams(form)
+          window.location.href = "?" + new URLSearchParams(formParams())
         }}>Search</Button>
       </Col>
     </Row>
