@@ -3,6 +3,7 @@ import { Container, Row, Col, Button, Spinner, Badge } from "react-bootstrap";
 import axios from "axios";
 import { BADGES } from "./utils";
 import Search from "../components/Search";
+import { ToastContainer, toast } from 'react-toastify';
 
 const Labeling = () => {
   const [data, setData] = useState([]);
@@ -43,6 +44,12 @@ const Labeling = () => {
     fetchData();
   }, [])
 
+  const handleDelete = (uid) => {
+    if (confirm("Are you sure you want to delete?")) {
+      axios.delete(`/api/inference/destroy/${uid}`).then(() => toast.warn("Deleted!"))
+    }
+  }
+
 
   return (
     <Container className="py-4 px-4" id="self-checkout">
@@ -56,20 +63,23 @@ const Labeling = () => {
             md={4}
             sm={6}
             className="my-2 pointer"
+            style={{position: "relative"}}
           >
+            <div style={{position: "absolute", right: 30, top: 5}} onClick={() => handleDelete(d.uid)}>❌</div>
             <a href={`/web/demo/${d.uid}`}>
-              <img src={d.image} height="200"/>
-              <div>
-                <Badge className="mx-1" bg={BADGES.label[d.metadata.label]}>{d.metadata.label}</Badge>
-                <Badge className="mx-1" bg={BADGES.quality[d.metadata.quality]}>{d.metadata.quality}</Badge>
-                <Badge className="mx-1" bg={BADGES.testType[d.metadata.testType]}>{d.metadata.testType}</Badge>
-              </div>
+              <img src={d.image} height="200" className="rounded"/>
             </a>
+            <div>
+              <Badge bg={BADGES.label[d.metadata.label]}>{d.metadata.label}</Badge>
+              <Badge className="mx-1" bg={BADGES.quality[d.metadata.quality]}>{d.metadata.quality}</Badge>
+              <Badge bg={BADGES.testType[d.metadata.testType]}>{d.metadata.testType}</Badge>
+            </div>
           </Col>
         ))}
       </Row>
       {loading && <Spinner animation="border" />}
       {(continuationKey || data.filter(x => !x.loaded).length > 0) && <Button className="w-100 btn-lg" onClick={fetchData}>Load more</Button>}
+      <ToastContainer position="top-right" autoClose={5000} />
     </Container>
   );
 }
