@@ -10,17 +10,37 @@
     {
       "name": "CropImage",
       "params": {
-        "percentageOfX": 0.13,
-        "percentageOfY": 0.04,
-        "width": 390,
-        "height": 500,
+        "percentageOfX": 0.31,
+        "percentageOfY": 0.45,
+        "width": 50,
+        "height": 50,
+        "outputName": "white_crop"
+      }
+    },
+    {
+      "name": "ColorNormalizer",
+      "params": {
+        "samples": [
+          {"inputName": "white_crop", "targetColor": [255, 255, 255]}
+        ],
+        "inputName": "canvas",
+        "outputName": "canvas"
+      }
+    },
+    {
+      "name": "CropImage",
+      "params": {
+        "percentageOfX": 0,
+        "percentageOfY": 0.23,
+        "width": 512,
+        "height": 280,
         "outputName": "device_crop"
       }
     },
     {
       "name": "CheckText",
       "params": {
-        "words": ["ID", "S", "C", "T", "COVID", "Ag"],
+        "words": ["visby", "Respiratory", "Health"],
         "outputName": "has_correct_text",
         "inputCanvasName": "device_crop"
       }
@@ -28,10 +48,10 @@
     {
       "name": "CropImage",
       "params": {
-        "percentageOfX": 0.42,
-        "percentageOfY": 0.34,
-        "width": 70,
-        "height": 120,
+        "percentageOfX": 0.1,
+        "percentageOfY": 0.56,
+        "width": 150,
+        "height": 75,
         "outputName": "result_detection"
       }
     },
@@ -39,10 +59,135 @@
       "name": "ResultReader",
       "params": {
         "threshold":0.99,
-        "colorTarget": [255, 135, 115],
-        "testType": "standard",
+        "colorTarget": [128, 255, 181],
+        "testType": "visby_indicator",
         "inputCanvasName": "result_detection",
         "outputName": "filtered_result_detection"
+      }
+    },
+    {
+      "name": "CropImage",
+      "params": {
+        "percentageOfX": 0.6,
+        "percentageOfY": 0.35,
+        "width": 50,
+        "height": 50,
+        "outputName": "result_detection_results_valid"
+      }
+    },
+    {
+      "name": "ResultReader",
+      "params": {
+        "threshold": 0.996,
+        "colorTarget": [145, 132, 165],
+        "testType": "visby_result",
+        "inputCanvasName": "result_detection_results_valid",
+        "outputName": "filtered_result_results_valid"
+      }
+    },
+    {
+      "name": "CropImage",
+      "params": {
+        "percentageOfX": 0.6,
+        "percentageOfY": 0.45,
+        "width": 50,
+        "height": 30,
+        "outputName": "result_detection_flua"
+      }
+    },
+    {
+      "name": "ResultReader",
+      "params": {
+        "threshold": 0.996,
+        "colorTarget": [145, 132, 165],
+        "testType": "visby_result",
+        "inputCanvasName": "result_detection_flua",
+        "outputName": "filtered_result_detection_flua"
+      }
+    },
+    {
+      "name": "CropImage",
+      "params": {
+        "percentageOfX": 0.6,
+        "percentageOfY": 0.5,
+        "width": 50,
+        "height": 30,
+        "outputName": "result_detection_flub"
+      }
+    },
+    {
+      "name": "ResultReader",
+      "params": {
+        "threshold": 0.996,
+        "colorTarget": [145, 132, 165],
+        "testType": "visby_result",
+        "inputCanvasName": "result_detection_flub",
+        "outputName": "filtered_result_detection_flub"
+      }
+    },
+    {
+      "name": "CropImage",
+      "params": {
+        "percentageOfX": 0.6,
+        "percentageOfY": 0.57,
+        "width": 50,
+        "height": 30,
+        "outputName": "result_detection_covid"
+      }
+    },
+    {
+      "name": "ResultReader",
+      "params": {
+        "threshold": 0.996,
+        "colorTarget": [145, 132, 165],
+        "testType": "visby_result",
+        "inputCanvasName": "result_detection_covid",
+        "outputName": "filtered_result_detection_covid"
+      }
+    },
+    {
+      "name": "CropImage",
+      "params": {
+        "percentageOfX": 0.42,
+        "percentageOfY": 0.35,
+        "width": 90,
+        "height": 150,
+        "outputName": "result_text_check_crop_2"
+      }
+    },
+    {
+      "name": "CheckText",
+      "params": {
+        "words": ["results", "valid", "vald", "vaud", "flu", "covid"],
+        "outputName": "result_text_check_2",
+        "inputCanvasName": "result_text_check_crop_2"
+      }
+    },
+    {
+      "name": "CannyEdgeDetection",
+      "params": {
+        "inputName": "device_crop",
+        "outputName": "canny",
+        "blurOutputName": "blur_score"
+      }
+    },
+    {
+      "name": "CropImage",
+      "params": {
+        "percentageOfX": 0.88,
+        "percentageOfY": 0.37,
+        "width": 10,
+        "height": 10,
+        "outputName": "color_check_crop"
+      }
+    },
+    {
+      "name": "CheckColor",
+      "params": {
+        "rgb": {"r": 125, "g": 104, "b": 138},
+        "tolerance": 100,
+        "outputName": "color_check",
+        "inputCanvasName": "color_check_crop"
       }
     }
   ]

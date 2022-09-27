@@ -3,7 +3,8 @@ import ColorFilter from "./ColorFilter";
 import ImageClustering from "./ImageClustering";
 
 const SHAPES = {
-  horizontalLine(w, h) { return w > h }
+  horizontalLine(w, h) { return w > h },
+  verticalLine(w, h) { return w < h }
 }
 
 const CONFIGS = {
@@ -11,6 +12,14 @@ const CONFIGS = {
     results: {2: "positive", 1: "negative"},
     findShapes: SHAPES.horizontalLine,
   },
+  visby_indicator: {
+    results: {1: "ready"},
+    findShapes: SHAPES.verticalLine,
+  },
+  visby_result: {
+    results: {1: "positive", 0: "negative"},
+    findShapes: SHAPES.verticalLine,
+  }
 }
 
 export default class ResultReader {
