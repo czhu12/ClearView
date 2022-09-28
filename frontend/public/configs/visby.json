@@ -146,24 +146,6 @@
       }
     },
     {
-      "name": "CropImage",
-      "params": {
-        "percentageOfX": 0.42,
-        "percentageOfY": 0.35,
-        "width": 90,
-        "height": 150,
-        "outputName": "check_result_text"
-      }
-    },
-    {
-      "name": "CheckText",
-      "params": {
-        "words": ["results", "valid", "vald", "vaud", "flu", "covid"],
-        "outputName": "match_check_result_text",
-        "inputCanvasName": "check_result_text"
-      }
-    },
-    {
       "name": "CannyEdgeDetection",
       "params": {
         "inputName": "device_crop",
