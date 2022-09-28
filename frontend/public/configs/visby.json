@@ -52,7 +52,7 @@
         "percentageOfY": 0.56,
         "width": 150,
         "height": 75,
-        "outputName": "result_detection"
+        "outputName": "is_result_ready"
       }
     },
     {
@@ -61,8 +61,8 @@
         "threshold":0.99,
         "colorTarget": [128, 255, 181],
         "testType": "visby_indicator",
-        "inputCanvasName": "result_detection",
-        "outputName": "filtered_result_detection"
+        "inputCanvasName": "is_result_ready",
+        "outputName": "filtered_is_result_ready"
       }
     },
     {
@@ -72,7 +72,7 @@
         "percentageOfY": 0.35,
         "width": 50,
         "height": 50,
-        "outputName": "result_detection_results_valid"
+        "outputName": "is_result_valid"
       }
     },
     {
@@ -81,8 +81,8 @@
         "threshold": 0.996,
         "colorTarget": [145, 132, 165],
         "testType": "visby_result",
-        "inputCanvasName": "result_detection_results_valid",
-        "outputName": "filtered_result_results_valid"
+        "inputCanvasName": "is_result_valid",
+        "outputName": "filtered_is_result_valid"
       }
     },
     {
@@ -92,7 +92,7 @@
         "percentageOfY": 0.45,
         "width": 50,
         "height": 30,
-        "outputName": "result_detection_flua"
+        "outputName": "flu_a"
       }
     },
     {
@@ -101,8 +101,8 @@
         "threshold": 0.996,
         "colorTarget": [145, 132, 165],
         "testType": "visby_result",
-        "inputCanvasName": "result_detection_flua",
-        "outputName": "filtered_result_detection_flua"
+        "inputCanvasName": "flu_a",
+        "outputName": "filtered_flu_a"
       }
     },
     {
@@ -112,7 +112,7 @@
         "percentageOfY": 0.5,
         "width": 50,
         "height": 30,
-        "outputName": "result_detection_flub"
+        "outputName": "flu_b"
       }
     },
     {
@@ -121,8 +121,8 @@
         "threshold": 0.996,
         "colorTarget": [145, 132, 165],
         "testType": "visby_result",
-        "inputCanvasName": "result_detection_flub",
-        "outputName": "filtered_result_detection_flub"
+        "inputCanvasName": "flu_b",
+        "outputName": "filtered_flu_b"
       }
     },
     {
@@ -132,7 +132,7 @@
         "percentageOfY": 0.57,
         "width": 50,
         "height": 30,
-        "outputName": "result_detection_covid"
+        "outputName": "covid_19"
       }
     },
     {
@@ -141,8 +141,8 @@
         "threshold": 0.996,
         "colorTarget": [145, 132, 165],
         "testType": "visby_result",
-        "inputCanvasName": "result_detection_covid",
-        "outputName": "filtered_result_detection_covid"
+        "inputCanvasName": "covid_19",
+        "outputName": "filtered_covid_19"
       }
     },
     {
@@ -152,15 +152,15 @@
         "percentageOfY": 0.35,
         "width": 90,
         "height": 150,
-        "outputName": "result_text_check_crop_2"
+        "outputName": "check_result_text"
       }
     },
     {
       "name": "CheckText",
       "params": {
         "words": ["results", "valid", "vald", "vaud", "flu", "covid"],
-        "outputName": "result_text_check_2",
-        "inputCanvasName": "result_text_check_crop_2"
+        "outputName": "match_check_result_text",
+        "inputCanvasName": "check_result_text"
       }
     },
     {
