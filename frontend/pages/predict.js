@@ -8,34 +8,63 @@ import { Button, Container, Form } from 'react-bootstrap';
 import ExplainReasons from '../src/components/ExplainReasons';
 import { testTypeOptions } from '../src/components/Search';
 import Select from 'react-select';
+import { ToastContainer, toast } from 'react-toastify';
 const CAMERA_DIMENSION = 500;
 
 let pipeline;
 export default function Predict() {
-  const [testType, setTestType] = useState(null)
+  const [testType, setTestType] = useState(null);
+  const [successfulCapture, setSuccessfulCapture] = useState(false);
   const [explain, setExplain] = useState(false);
   const explainRef = useRef(explain)
   const [result, setResult] = useState(null);
   const webcamRef = useRef(null);
   const initializePipeline = async () => {
     if (testType) {
-      pipeline = await PipelineBuilder.loadFromPath(`/configs/${testType}.json`, true)
+      pipeline = await PipelineBuilder.loadFromPath(`/configs/${testType}.json`)
     }
   }
-  const makePrediction = async (base64) => {
-    const state = { base64 }
-    const { result, outputs } = await pipeline.execute(state);
-    setResult({outputs, state});
+  
+  const handleExplain = () => {
+    setExplain(!explain)
+    explainRef.current = !explain;
   }
+
+  const makePrediction = async (base64) => {
+    const state = { base64, forWebcam: true }
+    const { result: _result, outputs } = await pipeline.execute(state);
+    setResult({outputs, state});
+    if (_result) {
+      setSuccessfulCapture(true);
+    }
+  }
+
+  const makeFullPrediction = async () => {
+    const state = { ...result.state, forWebcam: false };
+    const { result: _result, outputs } = await pipeline.execute(state);
+    setResult({outputs, state, result: _result});
+  }
+
+  useEffect(() => {
+    if (successfulCapture) {
+      toast.success("Processing Result");
+      handleExplain();
+      makeFullPrediction();
+    }
+  }, [successfulCapture])
+
   useEffect(() => {
     if (typeof window !== "undefined" && testType) {
       initializePipeline();
-      setInterval(() => {
+      const prediction = setInterval(() => {
         if (pipeline && webcamRef.current && !explainRef.current) {
           const base64 = webcamRef.current.getScreenshot();
           makePrediction(base64);  
         }
       }, 300);
+      return () => {
+        clearInterval(prediction);
+      }
     }
   }, [testType]);
 
@@ -80,10 +109,7 @@ export default function Predict() {
               <Form.Check
                 type="checkbox"
                 label="Explain what happened"
-                onChange={() => {
-                  setExplain(!explain)
-                  explainRef.current = !explain;
-                }}
+                onChange={handleExplain}
                 value={explain}
               />
               {explain && (
@@ -103,6 +129,7 @@ export default function Predict() {
             </div>
           </>
         }
+        <ToastContainer position="top-right" autoClose={5000} />
       </Container>
     </div>
   )

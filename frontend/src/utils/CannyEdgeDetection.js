@@ -2,6 +2,7 @@ import { createCanvas } from "canvas";
 import { variance } from "./math";
 
 export default class CannyEdgeDetection {
+  static name = 'CannyEdgeDetection';
   constructor({inputName, outputName, blurOutputName}) {
     this.inputName = inputName;
     this.outputName = outputName;
