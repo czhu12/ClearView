@@ -6,24 +6,29 @@ import { useEffect, useRef, useState } from 'react';
 import { PipelineBuilder } from '../src/utils/Pipeline';
 import { Button, Container, Form } from 'react-bootstrap';
 import ExplainReasons from '../src/components/ExplainReasons';
+import { testTypeOptions } from '../src/components/Search';
+import Select from 'react-select';
 const CAMERA_DIMENSION = 500;
 
 let pipeline;
 export default function Predict() {
+  const [testType, setTestType] = useState(null)
   const [explain, setExplain] = useState(false);
   const explainRef = useRef(explain)
   const [result, setResult] = useState(null);
   const webcamRef = useRef(null);
   const initializePipeline = async () => {
-    pipeline = await PipelineBuilder.loadFromPath("/configs/abbott.json")
+    if (testType) {
+      pipeline = await PipelineBuilder.loadFromPath(`/configs/${testType}.json`, true)
+    }
   }
   const makePrediction = async (base64) => {
     const state = { base64 }
-    const { result, reasons } = await pipeline.execute(state);
-    setResult({reasons: reasons, state});
+    const { result, outputs } = await pipeline.execute(state);
+    setResult({outputs, state});
   }
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && testType) {
       initializePipeline();
       setInterval(() => {
         if (pipeline && webcamRef.current && !explainRef.current) {
@@ -32,7 +37,7 @@ export default function Predict() {
         }
       }, 300);
     }
-  }, []);
+  }, [testType]);
 
   return (
     <div className={styles.container}>
@@ -43,51 +48,61 @@ export default function Predict() {
       </Head>
       <Header />
       <Container style={{maxWidth: "560px"}} className="py-4 px-4" id="self-checkout">
-        <h3 className="my-5">Hold the test in front of the camera</h3>
-        <div className="mb-4" style={{width: "max-content"}}>
-          <div className="camera-wrapper">
-            <div className="camera-image-overlay">
-              <img src={"/images/abbott/transparent-full-outline-dotted.png"} />
+        <h3>Select type</h3>
+        <Select
+          value={testTypeOptions.find(option => option.value == testType)}
+          onChange={(e) => setTestType(e.value)}
+          options={testTypeOptions}
+        />
+        {testType && 
+          <>
+            <h3 className="my-5">Hold the test in front of the camera</h3>
+            <div className="mb-4" style={{width: "max-content"}}>
+              <div className="camera-wrapper">
+                <div className="camera-image-overlay">
+                  <img src={`/images/${testType}/transparent-full-outline-dotted.png`} />
+                </div>
+                <Webcam
+                  audio={false}
+                  ref={webcamRef}
+                  screenshotFormat="image/jpeg"
+                  videoConstraints={{
+                    width: CAMERA_DIMENSION,
+                    height: CAMERA_DIMENSION,
+                    facingMode: "environment"
+                  }}
+                  style={{ cursor: "pointer" }}
+                />
+                <div className="clearfix"></div>
+              </div>
             </div>
-            <Webcam
-              audio={false}
-              ref={webcamRef}
-              screenshotFormat="image/jpeg"
-              videoConstraints={{
-                width: CAMERA_DIMENSION,
-                height: CAMERA_DIMENSION,
-                facingMode: "environment"
-              }}
-              style={{ cursor: "pointer" }}
-            />
-            <div className="clearfix"></div>
-          </div>
-        </div>
-        <div>
-          <Form.Check
-            type="checkbox"
-            label="Explain what happened"
-            onChange={() => {
-              setExplain(!explain)
-              explainRef.current = !explain;
-            }}
-            value={explain}
-          />
-          {explain && (
             <div>
-              <Button onClick={() => {
-                const base64 = webcamRef.current.getScreenshot();
-                makePrediction(base64);  
-              }}>
-                Capture
-              </Button>
-              <ExplainReasons result={result} />
-              <Button onClick={() => setResult(null)}>
-                Clear
-              </Button>
+              <Form.Check
+                type="checkbox"
+                label="Explain what happened"
+                onChange={() => {
+                  setExplain(!explain)
+                  explainRef.current = !explain;
+                }}
+                value={explain}
+              />
+              {explain && (
+                <div>
+                  <Button onClick={() => {
+                    const base64 = webcamRef.current.getScreenshot();
+                    makePrediction(base64);  
+                  }}>
+                    Capture
+                  </Button>
+                  <ExplainReasons result={result} />
+                  <Button onClick={() => setResult(null)}>
+                    Clear
+                  </Button>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </>
+        }
       </Container>
     </div>
   )

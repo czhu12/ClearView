@@ -4,6 +4,8 @@ import { Container, Button, Form } from "react-bootstrap";
 import axios from 'axios';
 import CheckboxCard from '../components/CheckBoxCard';
 import { ToastContainer, toast } from 'react-toastify';
+import Select from 'react-select';
+import { testTypeOptions } from '../components/Search';
 
 const CAMERA_DIMENSION = 500;
 const toBase64 = file => new Promise((resolve, reject) => {
@@ -61,8 +63,6 @@ const Labeling = () => {
     }
   };
 
-  console.log(requiredQuestionsAnswered)
-
   const capture = useCallback(async () => {
       const newImageData = webcamRef.current.getScreenshot();
       saveLabel(newImageData);
@@ -77,26 +77,11 @@ const Labeling = () => {
   return (
     <Container style={{maxWidth: "560px"}} className="py-4 px-4" id="self-checkout">
       <h4 className="my-3">Select the test type</h4>
-      {[
-        ['abbott', '#DC5598'],
-        ['ihealth', '#E54E26'],
-        ['flowflex', '#E54E26'],
-        ['atomo', '#e74c3c'],
-        ['visby', '#9b59b6'],
-      ].map(c => {
-        const value = c[0];
-        const color = c[1];
-        return <CheckboxCard
-          name={value}
-          label={capitalizeFirstLetter(value)}
-          radio
-          onChange={() => {
-            setTestType(value)
-          }}
-          checked={testType === value}
-          style={{color: color, fontWeight: "bold"}}
-        />
-      })}
+      <Select
+        value={testTypeOptions.find(option => option.value == testType)}
+        onChange={(e) => setTestType(e.value)}
+        options={testTypeOptions}
+      />
       <div>
         <h4 className="my-3">Select the result</h4>
         {[['positive', '#e74c3c'], ['negative', '#27ae60'], ['inconclusive', '#f39c12']].map(c => {

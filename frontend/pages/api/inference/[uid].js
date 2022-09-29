@@ -1,4 +1,4 @@
-import { s3, imageKey, metadataKey, encode } from "../../../src/utils";
+import { s3, imageKey, encode } from "../../../src/utils";
 import { InferenceDynamoDb } from "../../../src/utils/DynamoDbManager";
 
 export default async function handler(req, res) {
