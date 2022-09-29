@@ -18,14 +18,9 @@ class PipelineError extends Error {
 }
 
 export class PipelineBuilder {
-  static async loadFromPath(configPath, forWebcam=false) {
+  static async loadFromPath(configPath) {
     const response = await axios.get(configPath);
-    const pipeline = new PipelineBuilder(response.data);
-    if (forWebcam) {
-      return pipeline.createForWebcam()
-    } else {
-      return pipeline.create()
-    }
+    return new PipelineBuilder(response.data).create();
   }
 
   constructor(config) {
@@ -59,31 +54,9 @@ export class PipelineBuilder {
 
     return new Pipeline(steps);
   }
-
-  createForWebcam() {
-    const steps = [];
-    for (let i = 0; i < this.config.steps.length; i++) {
-      const step = this.config.steps[i];
-      if (step.name === "CropImage") {
-        steps.push(new CropImage(step.params));
-      } else if (step.name === "CheckColor") {
-        steps.push(new CheckColor(step.params));
-      } else if (step.name === "QRChecker") {
-        steps.push(new QRChecker(step.params));
-      } else if (step.name === "ToCanvas") {
-        steps.push(new ToCanvas(step.params));
-      } else if (step.name === "TestTypeModel") {
-        steps.push(new TestTypeModel(step.params));
-      } else if (step.name === "ResultReader") {
-        steps.push(new ResultReader(step.params));
-      } else if (step.name === "ColorNormalizer") {
-        steps.push(new ColorNormalizer(step.params));
-      }
-    }
-
-    return new Pipeline(steps);
-  }
 }
+
+const SLOW_QUALITY_CHECKS = ["CannyEdgeDetection", "CheckText", "TestTypeModel"]
 
 export default class Pipeline {
   constructor(steps, definition={}) {
@@ -95,29 +68,34 @@ export default class Pipeline {
     const outputs = []
     const startTime = (new Date()).getTime();
     const timing = {};
+    let result = true;
+    const steps = state.forWebcam
+      ? this.steps.filter(x => !SLOW_QUALITY_CHECKS.includes(x.constructor.name))
+      : this.steps;
     try {
-      for (let i = 0; i < this.steps.length; i++) {
-        const step = this.steps[i];
+      for (let i = 0; i < steps.length; i++) {
+        const step = steps[i];
         const stepStartTime = (new Date()).getTime();
         const { result, reason } = await step.execute(state, this);
         timing[step.constructor.name + " " + i] = (new Date()).getTime() - stepStartTime;
 
-        // if (!result) {
-        //   outputs.push({ result, reason, failed: true, outputName: step.outputName });
-        //   throw new PipelineError(reason);
-        // }
+        if (!result) {
+          outputs.push({ result, reason, failed: true, outputName: step.outputName });
+          throw new PipelineError(reason);
+        }
 
         if (step.outputName) {
           outputs.push({ result, reason, outputName: step.outputName });
         }
       }
     } catch(error) {
-      //console.log(error);
+      // console.log(error);
+      result = false;
     }
 
 
     timing.total = (new Date()).getTime() - startTime;
     state.timing = timing;
-    return { result: true, outputs };
+    return { result, outputs };
   }
 }

@@ -1,6 +1,7 @@
 import { createWorker } from 'tesseract.js';
 
 export default class CheckText {
+  static name = 'CheckText';
   constructor({ words, outputName, inputCanvasName }) {
     this.words = words;
     this.outputName = outputName;
