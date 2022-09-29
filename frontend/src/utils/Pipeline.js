@@ -9,6 +9,7 @@ import ResultReader from "./ResultReader";
 import ColorNormalizer from "./ColorNormalizer";
 import CannyEdgeDetection from "./CannyEdgeDetection";
 
+const SLOW_QUALITY_CHECKS = ["CannyEdgeDetection", "CheckText", "TestTypeModel"]
 
 class PipelineError extends Error {
   constructor(message) {
@@ -55,8 +56,6 @@ export class PipelineBuilder {
     return new Pipeline(steps);
   }
 }
-
-const SLOW_QUALITY_CHECKS = ["CannyEdgeDetection", "CheckText", "TestTypeModel"]
 
 export default class Pipeline {
   constructor(steps, definition={}) {
