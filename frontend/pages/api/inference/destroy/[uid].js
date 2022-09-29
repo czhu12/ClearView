@@ -2,7 +2,7 @@ import { s3, imageKey, metadataKey } from "../../../../src/utils";
 import { InferenceDynamoDb } from "../../../../src/utils/DynamoDbManager";
 
 export default async function handler(req, res) {
-  const { uid } = req.query
+  const { uid, testType } = req.query;
   if (req.method === "DELETE") {
     try {
      await s3.deleteObject({
@@ -15,7 +15,7 @@ export default async function handler(req, res) {
         Key: metadataKey(uid)
       }).promise();
 
-      await new InferenceDynamoDb().delete(uid)
+      await new InferenceDynamoDb().delete(uid, testType)
 
       res.status(200).json({message: 'success'})
     } catch {

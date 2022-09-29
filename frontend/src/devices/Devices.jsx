@@ -44,9 +44,9 @@ const Labeling = () => {
     fetchData();
   }, [])
 
-  const handleDelete = (uid) => {
+  const handleDelete = (uid, testType) => {
     if (confirm("Are you sure you want to delete?")) {
-      axios.delete(`/api/inference/destroy/${uid}`).then(() => toast.warn("Deleted!"))
+      axios.delete(`/api/inference/destroy/${uid}?testType=${testType}`).then(() => toast.warn("Deleted!"))
     }
   }
 
@@ -65,7 +65,7 @@ const Labeling = () => {
             className="my-2 pointer"
             style={{position: "relative"}}
           >
-            <div style={{position: "absolute", right: 30, top: 5}} onClick={() => handleDelete(d.uid)}>❌</div>
+            <div style={{position: "absolute", right: 30, top: 5}} onClick={() => handleDelete(d.uid, d.metadata.testType)}>❌</div>
             <a href={`/web/demo/${d.uid}`}>
               <img src={d.image} height="200" className="rounded"/>
             </a>
