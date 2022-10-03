@@ -9,6 +9,7 @@ import ResultReader from "./ResultReader";
 import ColorNormalizer from "./ColorNormalizer";
 import CannyEdgeDetection from "./CannyEdgeDetection";
 
+const SLOW_QUALITY_CHECKS = ["CannyEdgeDetection", "CheckText", "TestTypeModel"]
 
 class PipelineError extends Error {
   constructor(message) {
@@ -66,9 +67,13 @@ export default class Pipeline {
     const outputs = []
     const startTime = (new Date()).getTime();
     const timing = {};
+    let result = true;
+    const steps = state.forWebcam
+      ? this.steps.filter(x => !SLOW_QUALITY_CHECKS.includes(x.constructor.name))
+      : this.steps;
     try {
-      for (let i = 0; i < this.steps.length; i++) {
-        const step = this.steps[i];
+      for (let i = 0; i < steps.length; i++) {
+        const step = steps[i];
         const stepStartTime = (new Date()).getTime();
         const { result, reason } = await step.execute(state, this);
         timing[step.constructor.name + " " + i] = (new Date()).getTime() - stepStartTime;
@@ -83,12 +88,13 @@ export default class Pipeline {
         }
       }
     } catch(error) {
-      //console.log(error);
+      // console.log(error);
+      result = false;
     }
 
 
     timing.total = (new Date()).getTime() - startTime;
     state.timing = timing;
-    return { result: true, outputs };
+    return { result, outputs };
   }
 }

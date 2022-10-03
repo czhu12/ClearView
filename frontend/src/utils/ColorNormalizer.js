@@ -14,6 +14,7 @@ const colorShift = (canvas, shift) => {
 };
 
 export default class ColorNormalizer {
+  static name = 'ColorNormalizer';
   constructor({samples, inputName, outputName}) {
     this.samples = samples;
     this.inputName = inputName;

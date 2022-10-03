@@ -23,6 +23,7 @@ const CONFIGS = {
 }
 
 export default class ResultReader {
+  static name = 'ResultReader';
   constructor({ threshold, colorTarget, inputCanvasName, outputName, testType}) {
     this.colorTarget = colorTarget;
     this.threshold = threshold;

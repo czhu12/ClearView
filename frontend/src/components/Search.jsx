@@ -4,7 +4,7 @@ import Select from 'react-select';
 
 const createSelectOptions = (options, name) => options.map(o => ({label: o, value: o, name: name}))
 
-const testTypeOptions = createSelectOptions([
+export const testTypeOptions = createSelectOptions([
   'abbott',
   'ihealth',
   'flowflex',

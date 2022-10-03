@@ -15,6 +15,7 @@ const DIRECTIONS = {
 const DIRECTION_KEYS = Object.keys(DIRECTIONS)
 
 export default class ImageClustering {
+  static name = 'ImageClustering';
   constructor(imageData, coloredNodes) {
     this.imageData = imageData;
     this.coloredNodes = coloredNodes;

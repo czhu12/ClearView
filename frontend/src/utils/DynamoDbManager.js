@@ -40,9 +40,9 @@ export class InferenceDynamoDb {
     return await this.dynamoDb.create(params)
   }
 
-  async delete(id) {
-    if (!id) throw new Error("Missing id");
-    return await this.dynamoDb.delete(id)
+  async delete(id, testType) {
+    if (!id || !testType) throw new Error("Missing id or testType");
+    return await this.dynamoDb.delete({id, testType})
   }
 }
 
@@ -90,10 +90,10 @@ class DynamoDbManager {
     })
   }
 
-  delete(id) {
+  delete({id, testType}) {
     const params = {
       TableName: this.table,
-      Key: marshall({id})
+      Key: marshall({id, testType})
     }
     return new Promise((resolve, reject) => {
       dynamoDB.deleteItem(params, function (err, _) {

@@ -27,6 +27,7 @@ class Color {
 
 
 export default class ColorFilter {
+  static name = 'ColorFilter';
   constructor({ threshold, colorTarget, inputCanvasName, outputName }) {
     this.colorTarget = colorTarget;
     this.threshold = threshold;

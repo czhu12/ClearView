@@ -48,6 +48,7 @@ function imageDataToTensor(data, dims) {
 const SIZE = 224;
 const DIMS = [1, 3, SIZE, SIZE];
 export default class VisionModel {
+  static name = 'VisionModel';
   constructor(modelPath) {
     this.session = null;
     this.modelPath = modelPath;
