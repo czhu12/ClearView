@@ -2,8 +2,8 @@ import { Container, Navbar, Nav } from "react-bootstrap";
 
 export default function Header() {
   return (
-    <Navbar bg="light" expand="lg">
-      <Container>
+    <Container>
+      <Navbar bg="light" expand="lg">
         <Navbar.Brand href="/">Clear View</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -13,7 +13,7 @@ export default function Header() {
             <Nav.Link href="/web/demo">Data</Nav.Link>
           </Nav>
         </Navbar.Collapse>
-      </Container>
-    </Navbar>
+      </Navbar>
+    </Container>
   );
 }

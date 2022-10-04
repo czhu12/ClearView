@@ -106,13 +106,7 @@ export default function Predict() {
               </div>
             </div>
             <div>
-              <Form.Check
-                type="checkbox"
-                label="Explain what happened"
-                onChange={handleExplain}
-                value={explain}
-              />
-              {explain && (
+              {result && (
                 <div>
                   <Button onClick={() => {
                     const base64 = webcamRef.current.getScreenshot();
