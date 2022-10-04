@@ -1,17 +1,16 @@
 import { useRouter } from 'next/router';
 import Header from '../../src/components/Header';
-import Devices from "../../src/devices/Devices";
+import dynamic from 'next/dynamic';
+const  Devices = dynamic(() => import("../../src/devices/Devices"), { ssr: false })
 
 export default function Home() {
-  const { query, isReady } = useRouter();
-
-  if (!isReady) {
-    return <></>
-  }
+  const { isReady } = useRouter();
   return (
-    <main>
+    <div>
       <Header />
-      <Devices />
-    </main>
+      <main>
+        {isReady && <Devices />}
+      </main>
+    </div>
   )
 }
