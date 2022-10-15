@@ -1,9 +1,54 @@
 import { isCanvas, titleCase } from "../devices/utils";
 import dynamic from 'next/dynamic'
+import { Chart as ChartJS } from 'chart.js/auto'
+import { Line }            from 'react-chartjs-2'
 
 const ReactJson = dynamic(() => import('react-json-view'), { ssr: false });
 
 
+function RenderPreview({preview, previewType}) {
+  let data;
+  if (previewType === "LinearColorSpaceProjection") {
+    const labels = Array(preview.colorsAlongX.length).fill(1).map((n, i) => n + i);
+    data = {
+      labels: labels,
+      datasets: [
+        {
+            label: "Reds",
+            backgroundColor: 'rgb(255, 0, 0)',
+            borderColor: 'rgb(255, 0, 0)',
+            data: preview.colorsAlongX.map(c => c.r)
+        },
+        {
+            label: "Greens",
+            backgroundColor: 'rgb(0, 255, 0)',
+            borderColor: 'rgb(0, 255, 0)',
+            data: preview.colorsAlongX.map(c => c.g)
+        },
+        {
+            label: "Blues",
+            backgroundColor: 'rgb(0, 0, 255)',
+            borderColor: 'rgb(0, 0, 255)',
+            data: preview.colorsAlongX.map(c => c.b)
+        }
+      ]
+    };
+  }
+  return (
+    <div>
+      {previewType === "LinearColorSpaceProjection" && (
+        <div>
+          <Line data={data} options={{plugins: {title: "hello"}}}/>
+        </div>
+      )}
+      {previewType !== "LinearColorSpaceProjection" && (
+        <div>
+          {preview}
+        </div>
+      )}
+    </div>
+  );
+}
 export default function ExplainReasons({result}) {
   const buildStepResult = (output, idx) => {
     let preview = result.state[output.outputName];
@@ -17,7 +62,7 @@ export default function ExplainReasons({result}) {
           {output.failed && <span className="text-danger ml-3">✕</span>}
           {!output.failed && <span className="text-success ml-3">✓</span>}
         </h3>
-        <div>{preview}</div>
+        <div><RenderPreview previewType={output.name} preview={preview} /></div>
         {output.reason}
         <hr/>
       </div>

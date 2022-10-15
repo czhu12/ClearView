@@ -102,6 +102,14 @@
       }
     },
     {
+      "name": "RotateCanvas",
+      "params": {
+        "inputName": "result_detection",
+        "outputName": "rotated_result_detection",
+        "rotation": 90
+      }
+    },
+    {
       "name": "QRChecker",
       "params": {
         "inputCanvasName": "qr_detection",
@@ -111,11 +119,10 @@
       }
     },
     {
-      "name": "TestTypeModel",
+      "name": "LinearColorSpaceProjection",
       "params": {
-        "inputCanvasName": "result_detection",
-        "labels": ["negative", "positive", "inconclusive"],
-        "outputLabelName": "cv_prediction"
+        "inputCanvasName": "rotated_result_detection",
+        "outputName": "color_projections"
       }
     }
   ]

@@ -8,6 +8,8 @@ import TestTypeModel from "./TestTypeModel";
 import ResultReader from "./ResultReader";
 import ColorNormalizer from "./ColorNormalizer";
 import CannyEdgeDetection from "./CannyEdgeDetection";
+import LinearColorSpaceProjection from "./LinearColorSpaceProjection";
+import RotateCanvas from "./RotateCanvas";
 
 const SLOW_QUALITY_CHECKS = ["CannyEdgeDetection", "CheckText", "TestTypeModel"]
 
@@ -50,6 +52,12 @@ export class PipelineBuilder {
         steps.push(new ColorNormalizer(step.params));
       } else if (step.name === "CannyEdgeDetection") {
         steps.push(new CannyEdgeDetection(step.params));
+      } else if (step.name === "LinearColorSpaceProjection") {
+        steps.push(new LinearColorSpaceProjection(step.params));
+      } else if (step.name === "RotateCanvas") {
+        steps.push(new RotateCanvas(step.params));
+      } else {
+        console.error(`Step: ${step.name} not defined`);
       }
     }
 
@@ -84,11 +92,11 @@ export default class Pipeline {
         }
 
         if (step.outputName) {
-          outputs.push({ result, reason, outputName: step.outputName });
+          outputs.push({ result, reason, outputName: step.outputName, name: step.constructor.name });
         }
       }
     } catch(error) {
-      // console.log(error);
+      console.log(error);
       result = false;
     }
 
