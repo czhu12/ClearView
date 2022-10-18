@@ -12,6 +12,7 @@ const options = [
   { value: 'abbott-2', label: 'Abbott V0.1-dl' },
   { value: 'visby', label: 'Visby' },
   { value: 'ihealth', label: 'IHealth' },
+  { value: 'test', label: 'Test' },
 ];
 
 

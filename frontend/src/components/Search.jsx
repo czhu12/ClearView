@@ -10,6 +10,7 @@ export const testTypeOptions = createSelectOptions([
   'flowflex',
   'atomo',
   'visby',
+  'misc'
 ], "testType")
 
 const labelOptions = createSelectOptions([

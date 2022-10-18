@@ -7,10 +7,12 @@ const ReactJson = dynamic(() => import('react-json-view'), { ssr: false });
 
 
 function RenderPreview({preview, previewType}) {
-  let data;
+  let colors;
+  let normalizedColors;
+  let opponencyColors;
   if (previewType === "LinearColorSpaceProjection") {
     const labels = Array(preview.colorsAlongX.length).fill(1).map((n, i) => n + i);
-    data = {
+    colors = {
       labels: labels,
       datasets: [
         {
@@ -33,19 +35,82 @@ function RenderPreview({preview, previewType}) {
         }
       ]
     };
+
+    normalizedColors = {
+      labels: labels,
+      datasets: [
+        {
+            label: "nReds",
+            backgroundColor: 'rgb(255, 0, 0)',
+            borderColor: 'rgb(255, 0, 0)',
+            data: preview.normalizedColorsAlongX.map(c => c.r)
+        },
+        {
+            label: "nGreens",
+            backgroundColor: 'rgb(0, 255, 0)',
+            borderColor: 'rgb(0, 255, 0)',
+            data: preview.normalizedColorsAlongX.map(c => c.g)
+        },
+        {
+            label: "nBlues",
+            backgroundColor: 'rgb(0, 0, 255)',
+            borderColor: 'rgb(0, 0, 255)',
+            data: preview.normalizedColorsAlongX.map(c => c.b)
+        }
+      ]
+    };
+    opponencyColors = {
+      labels: labels,
+      datasets: [
+        {
+            label: "Opponency",
+            backgroundColor: 'rgb(0, 0, 0)',
+            borderColor: 'rgb(0, 0, 0)',
+            data: preview.opponencyAlongX
+        },
+      ]
+    };
+    return (
+      <div>
+        <Line data={colors} options={{
+          plugins: {title: "Colors"},
+          scales: {
+            yAxes: [{
+              display: false,
+              gridLines: {
+                drawBorder: false,
+              },
+            }]
+          },
+        }}/>
+        <Line data={normalizedColors} options={{
+          plugins: {title: "Normalized Colors"},
+          scales: {
+            yAxes: [{
+              gridLines: {
+                display: false,
+                drawBorder: false,
+              },
+            }]
+          },
+        }}/>
+        <Line data={opponencyColors} options={{
+          plugins: {title: "Opponency"},
+          scales: {
+            yAxes: [{
+              gridLines: {
+                display: false,
+                drawBorder: false,
+              },
+            }]
+          },
+        }}/>
+      </div>
+    );
   }
   return (
     <div>
-      {previewType === "LinearColorSpaceProjection" && (
-        <div>
-          <Line data={data} options={{plugins: {title: "hello"}}}/>
-        </div>
-      )}
-      {previewType !== "LinearColorSpaceProjection" && (
-        <div>
-          {preview}
-        </div>
-      )}
+      {preview}
     </div>
   );
 }

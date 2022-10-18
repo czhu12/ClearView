@@ -85,16 +85,6 @@
       }
     },
     {
-      "name": "ResultReader",
-      "params": {
-        "threshold":0.95,
-        "colorTarget": [255, 100, 151],
-        "testType": "standard",
-        "inputCanvasName": "result_detection",
-        "outputName": "filtered_result_detection"
-      }
-    },
-    {
       "name": "CannyEdgeDetection",
       "params": {
         "inputName": "result_detection",
@@ -123,6 +113,16 @@
       "params": {
         "inputCanvasName": "rotated_result_detection",
         "outputName": "color_projections"
+      }
+    },
+    {
+      "name": "ResultReader",
+      "params": {
+        "threshold":0.95,
+        "colorTarget": [255, 100, 151],
+        "testType": "standard",
+        "inputCanvasName": "result_detection",
+        "outputName": "filtered_result_detection"
       }
     }
   ]

@@ -36,14 +36,15 @@ export default class LinearColorSpaceProjection {
       const opponencyAlongY = []
       for (let y = 0; y < imageData.height; y++) {
         const color = getPixelAtCoordinate(x, y, imageData);
+        const normalizedSum = color.r + color.g + color.b;
         const normalizedColor = new Color(
-          color.r - average.r / variance.r,
-          color.g - average.g / variance.g,
-          color.b - average.b / variance.b,
+          color.r / normalizedSum * 255,
+          color.g / normalizedSum * 255,
+          color.b / normalizedSum * 255
         )
         colorsAlongY.push(color)
         normalizedColorsAlongY.push(normalizedColor)
-        opponencyAlongY.push(normalizedColor.r + normalizedColor.b - 2 * normalizedColor.g);
+        opponencyAlongY.push((normalizedColor.r + normalizedColor.b) - (2 * normalizedColor.g));
       }
       colorsAlongX.push(averageColors(colorsAlongY));
       normalizedColorsAlongX.push(averageColors(normalizedColorsAlongY));
