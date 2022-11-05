@@ -1,0 +1,30 @@
+{
+  "steps": [
+    {
+      "name": "ToCanvas",
+      "params": {
+        "width": 512,
+        "height": 512
+      }
+    },
+    {
+      "name": "RotateCanvas",
+      "params": {
+        "inputName": "canvas",
+        "outputName": "rotated_canvas",
+        "rotation": 90
+      }
+    },
+    {
+      "name": "LinearColorSpaceProjection",
+      "params": {
+        "inputCanvasName": "rotated_canvas",
+        "outputName": "color_projections",
+        "peakDetection": {
+          "minHeight": -2,
+          "minDistance": 10
+        }
+      }
+    }
+  ]
+}

@@ -10,6 +10,7 @@ function RenderPreview({preview, previewType}) {
   let colors;
   let normalizedColors;
   let opponencyColors;
+  let smoothedOpponencyColors;
   if (previewType === "LinearColorSpaceProjection") {
     const labels = Array(preview.colorsAlongX.length).fill(1).map((n, i) => n + i);
     colors = {
@@ -70,40 +71,30 @@ function RenderPreview({preview, previewType}) {
         },
       ]
     };
+    smoothedOpponencyColors = {
+      labels: labels,
+      datasets: [
+        {
+            label: "Smoothed Opponency",
+            backgroundColor: 'rgb(0, 0, 0)',
+            borderColor: 'rgb(0, 0, 0)',
+            data: preview.smoothedOpponencyAlongX
+        },
+      ]
+    }
     return (
       <div>
         <Line data={colors} options={{
           plugins: {title: "Colors"},
-          scales: {
-            yAxes: [{
-              display: false,
-              gridLines: {
-                drawBorder: false,
-              },
-            }]
-          },
         }}/>
         <Line data={normalizedColors} options={{
           plugins: {title: "Normalized Colors"},
-          scales: {
-            yAxes: [{
-              gridLines: {
-                display: false,
-                drawBorder: false,
-              },
-            }]
-          },
         }}/>
         <Line data={opponencyColors} options={{
           plugins: {title: "Opponency"},
-          scales: {
-            yAxes: [{
-              gridLines: {
-                display: false,
-                drawBorder: false,
-              },
-            }]
-          },
+        }}/>
+        <Line data={smoothedOpponencyColors} options={{
+          plugins: {title: "Smoothed Opponency"},
         }}/>
       </div>
     );

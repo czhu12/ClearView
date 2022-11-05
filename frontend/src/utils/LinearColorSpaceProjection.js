@@ -1,5 +1,6 @@
-import CanvasStatistics, { calcAverage, averageColors } from "./datautils/CanvasStatistics";
+import { calcAverage, averageColors } from "./datautils/CanvasStatistics";
 import Color from "./datautils/Color";
+import { smooth, minimalFindPeaks } from "./datautils/Peaks";
 
 
 function getColorIndicesForCoord(x, y, width) {
@@ -14,18 +15,16 @@ function getPixelAtCoordinate(x, y, imageData) {
 
 export default class LinearColorSpaceProjection {
   static name = 'LinearColorSpaceProjection';
-  constructor({ inputCanvasName, outputName }) {
+  constructor({ inputCanvasName, outputName, peakDetection }) {
     this.inputCanvasName = inputCanvasName;
     this.outputName = outputName;
+    this.peakDetection = peakDetection;
   }
 
   async execute(state) {
     const canvas = state[this.inputCanvasName];
     const imageData = canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height);
 
-
-    const canvasStatistics = new CanvasStatistics(canvas);
-    const { average, variance } = canvasStatistics.stats();
     // Calculate normalized, not normalized
     const colorsAlongX = []
     const normalizedColorsAlongX = [];
@@ -50,7 +49,10 @@ export default class LinearColorSpaceProjection {
       normalizedColorsAlongX.push(averageColors(normalizedColorsAlongY));
       opponencyAlongX.push(calcAverage(opponencyAlongY));
     }
-    state[this.outputName] = { colorsAlongX, normalizedColorsAlongX, opponencyAlongX }
+    const smoothedOpponencyAlongX = smooth(opponencyAlongX, 3);
+    const peaks = minimalFindPeaks(smoothedOpponencyAlongX, this.peakDetection.minDistance, this.peakDetection.minHeight);
+    state[this.outputName] = { colorsAlongX, normalizedColorsAlongX, opponencyAlongX, smoothedOpponencyAlongX, peaks }
+    console.log(peaks);
     return {
       result: true,
       reason: "",

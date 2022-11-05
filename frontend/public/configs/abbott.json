@@ -100,19 +100,23 @@
       }
     },
     {
+      "name": "LinearColorSpaceProjection",
+      "params": {
+        "inputCanvasName": "rotated_result_detection",
+        "outputName": "color_projections",
+        "peakDetection": {
+          "minHeight": -2,
+          "minDistance": 10
+        }
+      }
+    },
+    {
       "name": "QRChecker",
       "params": {
         "inputCanvasName": "qr_detection",
         "regex": ".*",
         "outputName": "qr_check",
         "supportedFormats": ["data_matrix"]
-      }
-    },
-    {
-      "name": "LinearColorSpaceProjection",
-      "params": {
-        "inputCanvasName": "rotated_result_detection",
-        "outputName": "color_projections"
       }
     },
     {
