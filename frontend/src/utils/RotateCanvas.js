@@ -9,7 +9,6 @@ export default class RotateCanvas {
   }
 
   async execute(state) {
-    debugger;
     const canvas = state[this.inputName];
     const outputCanvas = createCanvas(canvas.width, canvas.height);
     const outputContext = outputCanvas.getContext('2d');

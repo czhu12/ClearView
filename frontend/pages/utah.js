@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import { Container } from "react-bootstrap";
 import ExplainReasons from "../src/components/ExplainReasons";
+import Header from "../src/components/Header";
 import { PipelineBuilder } from "../src/utils/Pipeline";
 
 let pipeline;
@@ -36,11 +38,16 @@ export default function Demo() {
   console.log(result);
 
   return (
-    <div className="text-center">
-      <div className="display-4">Paste your thing</div>
-      {result && (
-        <ExplainReasons result={result} />
-      )}
+    <div>
+      <Header />
+      <Container style={{maxWidth: "560px"}}>
+        <div className="text-center">
+          <div className="display-4">Paste your thing</div>
+          {result && (
+            <ExplainReasons result={result} />
+          )}
+        </div>
+      </Container>
     </div>
   );
 }
