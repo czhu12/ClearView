@@ -84,17 +84,17 @@ function RenderPreview({preview, previewType}) {
     }
     return (
       <div>
-        <Line data={colors} options={{
-          plugins: {title: "Colors"},
-        }}/>
-        <Line data={normalizedColors} options={{
-          plugins: {title: "Normalized Colors"},
+        <Line data={smoothedOpponencyColors} options={{
+          plugins: {title: "Smoothed Opponency"},
         }}/>
         <Line data={opponencyColors} options={{
           plugins: {title: "Opponency"},
         }}/>
-        <Line data={smoothedOpponencyColors} options={{
-          plugins: {title: "Smoothed Opponency"},
+        <Line data={normalizedColors} options={{
+          plugins: {title: "Normalized Colors"},
+        }}/>
+        <Line data={colors} options={{
+          plugins: {title: "Colors"},
         }}/>
       </div>
     );

@@ -35,14 +35,13 @@ export default function Demo() {
     bindPasteHandler();
     initializePipeline();
   }, []);
-  console.log(result);
 
   return (
     <div>
       <Header />
       <Container style={{maxWidth: "560px"}}>
         <div className="text-center">
-          <div className="display-4">Paste your thing</div>
+          <div className="display-4">Paste your image</div>
           {result && (
             <ExplainReasons result={result} />
           )}

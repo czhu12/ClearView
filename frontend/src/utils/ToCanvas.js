@@ -8,9 +8,9 @@ export default class ToCanvas {
   }
 
   async execute(state) {
-    const canvas = createCanvas(this.width, this.height);
-    const ctx = canvas.getContext("2d");
     const image = await loadImage(state.base64);
+    const canvas = createCanvas(image.width, image.height);
+    const ctx = canvas.getContext("2d");
     if (this.rotate) {
       ctx.translate(canvas.width/2,canvas.height/2);
       ctx.rotate(270 * Math.PI / 180)
