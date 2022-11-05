@@ -42,6 +42,7 @@ export default function Demo() {
       <Container style={{maxWidth: "560px"}}>
         <div className="text-center">
           <div className="display-4">Paste your image</div>
+          <div className="text-muted">(cmd + shift + ctrl + 4)</div>
           {result && (
             <ExplainReasons result={result} />
           )}

@@ -109,7 +109,7 @@ export default function ExplainReasons({result}) {
   const buildStepResult = (output, idx) => {
     let preview = result.state[output.outputName];
     if (preview && isCanvas(preview)) {
-      preview = <img src={preview.toDataURL()} />
+      preview = <img className="main-image" src={preview.toDataURL()} />
     }
     return (
       <div key={idx}>
