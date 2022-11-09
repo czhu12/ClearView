@@ -46,7 +46,7 @@ export class InferenceDynamoDb {
   }
 }
 
-class DynamoDbManager {
+export class DynamoDbManager {
   constructor(table) {
     this.table = table;
   }
