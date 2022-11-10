@@ -48,6 +48,7 @@ export default class LinearColorSpaceProjection {
       colorsAlongX.push(averageColors(colorsAlongY));
       normalizedColorsAlongX.push(averageColors(normalizedColorsAlongY));
       opponencyAlongX.push(calcAverage(opponencyAlongY));
+      debugger;
     }
     const smoothedOpponencyAlongX = smooth(opponencyAlongX, 3);
     const peaks = minimalFindPeaks(smoothedOpponencyAlongX, this.peakDetection.minDistance, this.peakDetection.minHeight);
