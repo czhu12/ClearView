@@ -8,13 +8,15 @@ import axios from "axios";
 export default function Data() {
   const { query, isReady } = useRouter();
 
-  if (!isReady) return <></>;
+
   const [isAuthenticated, setAuthentication] = useState(false);
 
   const checkAuthentication = () => {
-    axios.post("/api/utah/authenticate", { password: query.password }).
-      then(_ => setAuthentication(true)).
-      catch(_ => alert("Not authorized"))
+    if (query.password) {
+      axios.post("/api/utah/authenticate", { password: query.password }).
+        then(_ => setAuthentication(true)).
+        catch(_ => alert("Not authorized"))
+    }
   }
 
   const downloadData = async () => {
@@ -36,7 +38,7 @@ export default function Data() {
     a.click()
   }
 
-  useEffect(checkAuthentication, []);
+  useEffect(checkAuthentication, [isReady]);
 
   return (
     <div>

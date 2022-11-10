@@ -10,8 +10,7 @@ import { Badge, Row, Form, Col, Button, Container } from "react-bootstrap";
 let pipeline;
 export default function Demo() {
   const { query, isReady } = useRouter();
-  if (!isReady) return <></>;
-  const [form, setForm] = useState({tag: query.tag});
+  const [form, setForm] = useState({});
   const [result, setResult] = useState(null);
   const bindPasteHandler = () => {
     document.onpaste = function(event) {
@@ -57,6 +56,10 @@ export default function Demo() {
       setForm({...form, validated: true})
     }
   }
+
+  useEffect(() => {
+    setForm({tag: query.tag})
+  }, [isReady])
 
   useEffect(() => {
     bindPasteHandler();
