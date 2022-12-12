@@ -8,13 +8,15 @@ import axios from "axios";
 export default function Data() {
   const { query, isReady } = useRouter();
 
-  if (!isReady) return <></>;
+
   const [isAuthenticated, setAuthentication] = useState(false);
 
   const checkAuthentication = () => {
-    axios.post("/api/utah/authenticate", { password: query.password }).
-      then(_ => setAuthentication(true)).
-      catch(_ => alert("Not authorized"))
+    if (query.password) {
+      axios.post("/api/utah/authenticate", { password: query.password }).
+        then(_ => setAuthentication(true)).
+        catch(_ => alert("Not authorized"))
+    }
   }
 
   const downloadData = async () => {
@@ -23,7 +25,7 @@ export default function Data() {
           replacer = (_, value) => value === null ? '' : value,
           header = Object.keys(items[0]),
           csv = [
-                  header.join(','),
+                  "number_one,tag,number_three,id,number_two",
                   ...items.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
                 ].join('\r\n'),
           blob = new Blob([csv], { type: 'text/csv' }),
@@ -36,7 +38,7 @@ export default function Data() {
     a.click()
   }
 
-  useEffect(checkAuthentication, []);
+  useEffect(checkAuthentication, [isReady]);
 
   return (
     <div>

@@ -10,8 +10,7 @@ import { Badge, Row, Form, Col, Button, Container } from "react-bootstrap";
 let pipeline;
 export default function Demo() {
   const { query, isReady } = useRouter();
-  if (!isReady) return <></>;
-  const [form, setForm] = useState({tag: query.tag});
+  const [form, setForm] = useState({});
   const [result, setResult] = useState(null);
   const bindPasteHandler = () => {
     document.onpaste = function(event) {
@@ -59,6 +58,10 @@ export default function Demo() {
   }
 
   useEffect(() => {
+    setForm({tag: query.tag})
+  }, [isReady])
+
+  useEffect(() => {
     bindPasteHandler();
     initializePipeline();
   }, []);
@@ -78,25 +81,25 @@ export default function Demo() {
                   <Col xs={5}>
                     <Form.Group className="mb-3" controlId="formID">
                       <Form.Label>ID</Form.Label>
-                      <Form.Control required onChange={handleChange} name="id" placeholder="ID" />
+                      <Form.Control required onChange={handleChange}  name="id" placeholder="ID" />
                     </Form.Group>
                   </Col>
                   <Col>
                     <Form.Group className="mb-3" controlId="formNumberOne">
                       <Form.Label>#</Form.Label>
-                      <Form.Control required onChange={handleChange} name="number_one" placeholder="#" type="number"/>
+                      <Form.Control required placeholder="#" onChange={handleChange}  name="number_one" />
                     </Form.Group>
                   </Col>
                   <Col>
                     <Form.Group className="mb-3" controlId="formNumberTwo">
                       <Form.Label>#</Form.Label>
-                      <Form.Control placeholder="#" onChange={handleChange} name="number_two" type="number" />
+                      <Form.Control placeholder="#" onChange={handleChange}  name="number_two" />
                     </Form.Group>
                   </Col>
                   <Col>
                     <Form.Group className="mb-3" controlId="formNumberTwo">
                       <Form.Label>#</Form.Label>
-                      <Form.Control placeholder="#" onChange={handleChange} name="number_three" type="number" />
+                      <Form.Control placeholder="#" onChange={handleChange}  name="number_three" />
                     </Form.Group>
                   </Col>
                 </Row>
