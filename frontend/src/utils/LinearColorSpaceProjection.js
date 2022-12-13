@@ -43,6 +43,9 @@ export default class LinearColorSpaceProjection {
           color.g / normalizedSum * 255,
           color.b / normalizedSum * 255
         )
+        if (color.r + color.g + color.b === 0) {
+          break;
+        }
         colorsAlongY.push(color)
         normalizedColorsAlongY.push(normalizedColor)
         opponencyAlongY.push(normalizedColor.r - normalizedColor.g);
@@ -50,6 +53,7 @@ export default class LinearColorSpaceProjection {
       }
       colorsAlongX.push(averageColors(colorsAlongY));
       normalizedColorsAlongX.push(averageColors(normalizedColorsAlongY));
+      console.log(opponencyAlongY.length)
       opponencyAlongX.push(calcAverage(opponencyAlongY));
       bOpponencyAlongX.push(calcAverage(bOpponencyAlongY));
     }
