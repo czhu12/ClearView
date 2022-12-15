@@ -97,9 +97,21 @@ export default function Demo() {
                     </Form.Group>
                   </Col>
                   <Col>
-                    <Form.Group className="mb-3" controlId="formNumberTwo">
+                    <Form.Group className="mb-3" controlId="formNumberThree">
                       <Form.Label>#</Form.Label>
                       <Form.Control placeholder="#" onChange={handleChange}  name="number_three" />
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group className="mb-3" controlId="formNumberFour">
+                      <Form.Label>#</Form.Label>
+                      <Form.Control placeholder="#" onChange={handleChange}  name="number_four" />
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group className="mb-3" controlId="formNumberFive">
+                      <Form.Label>#</Form.Label>
+                      <Form.Control placeholder="#" onChange={handleChange}  name="number_five" />
                     </Form.Group>
                   </Col>
                 </Row>

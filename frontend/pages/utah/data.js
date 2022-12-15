@@ -25,7 +25,7 @@ export default function Data() {
           replacer = (_, value) => value === null ? '' : value,
           header = Object.keys(items[0]),
           csv = [
-                  "number_one,tag,number_three,id,number_two",
+                  "number_one,tag,number_three,id,number_two,number_four,number_five",
                   ...items.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
                 ].join('\r\n'),
           blob = new Blob([csv], { type: 'text/csv' }),
