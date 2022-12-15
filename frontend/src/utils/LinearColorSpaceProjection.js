@@ -48,8 +48,10 @@ export default class LinearColorSpaceProjection {
         }
         colorsAlongY.push(color)
         normalizedColorsAlongY.push(normalizedColor)
-        opponencyAlongY.push(normalizedColor.r - normalizedColor.g);
-        bOpponencyAlongY.push(normalizedColor.b - (0.60975609756 * normalizedColor.r + 0.39024390243 * normalizedColor.g));
+        opponencyAlongY.push((normalizedColor.r - normalizedColor.g) / Math.sqrt(2));
+        bOpponencyAlongY.push(
+          ((normalizedColor.r + normalizedColor.g) - (2 * normalizedColor.b)) / Math.sqrt(6)
+        );
       }
       colorsAlongX.push(averageColors(colorsAlongY));
       normalizedColorsAlongX.push(averageColors(normalizedColorsAlongY));

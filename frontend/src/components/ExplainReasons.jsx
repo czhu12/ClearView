@@ -2,17 +2,27 @@ import { isCanvas, titleCase } from "../devices/utils";
 import dynamic from 'next/dynamic'
 import { Chart as ChartJS } from 'chart.js/auto'
 import { Line }            from 'react-chartjs-2'
+import { Col, Row } from "react-bootstrap";
+import { calcAverage } from "../utils/datautils/CanvasStatistics";
 
 const ReactJson = dynamic(() => import('react-json-view'), { ssr: false });
 
 
+const clamp = (data) => {
+  const threshold = [...data].sort()[parseInt(data.length * 0.75)]
+  return data.filter(d => d < threshold);
+}
 function RenderPreview({preview, previewType}) {
   let colors;
   let normalizedColors;
   let opponencyColors;
-  let smoothedOpponencyColors;
+  let opponencyBaseline;
   let bOpponencyColors;
+
+  let bOpponencyBaseline;
   if (previewType === "LinearColorSpaceProjection") {
+    let opponencyBaselineData = clamp(preview.opponencyAlongX);
+    let bOpponencyBaselineData = clamp(preview.bOpponencyAlongX);
     const labels = Array(preview.colorsAlongX.length).fill(1).map((n, i) => n + i);
     colors = {
       labels: labels,
@@ -72,14 +82,14 @@ function RenderPreview({preview, previewType}) {
         },
       ]
     };
-    smoothedOpponencyColors = {
+    opponencyBaseline = {
       labels: labels,
       datasets: [
         {
-            label: "Smoothed Opponency",
+            label: "Opponency Baseline",
             backgroundColor: 'rgb(0, 0, 0)',
             borderColor: 'rgb(0, 0, 0)',
-            data: preview.smoothedOpponencyAlongX
+            data: opponencyBaselineData
         },
       ]
     }
@@ -94,14 +104,45 @@ function RenderPreview({preview, previewType}) {
         },
       ]
     };
+    bOpponencyBaseline = {
+      labels: labels,
+      datasets: [
+        {
+            label: "Blue Opponency Baseline ",
+            backgroundColor: 'rgb(0, 0, 0)',
+            borderColor: 'rgb(0, 0, 0)',
+            data: bOpponencyBaselineData
+        },
+      ]
+    }
     return (
       <div>
-        <Line data={opponencyColors} options={{
-          plugins: {title: "Opponency"},
-        }}/>
-        <Line data={bOpponencyColors} options={{
-          plugins: {title: "Blue Opponency"},
-        }}/>
+        <Row className="my-4">
+          <Col>
+            <Line data={opponencyColors} options={{
+              plugins: {title: "Opponency"},
+            }}/>
+          </Col>
+          <Col>
+            <Line data={opponencyBaseline} options={{
+              plugins: {title: "Opponency Baseline"},
+            }}/>
+            Average: {calcAverage(opponencyBaselineData)}
+          </Col>
+        </Row>
+        <Row className="my-4">
+          <Col>
+            <Line data={bOpponencyColors} options={{
+              plugins: {title: "Blue Opponency"},
+            }}/>
+          </Col>
+          <Col>
+            <Line data={bOpponencyBaseline} options={{
+              plugins: {title: "Blue Opponency Baseline"},
+            }}/>
+            Average: {calcAverage(bOpponencyBaselineData)}
+          </Col>
+        </Row>
         <Line data={normalizedColors} options={{
           plugins: {title: "Normalized Colors"},
         }}/>
