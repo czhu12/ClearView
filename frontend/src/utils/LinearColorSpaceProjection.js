@@ -29,10 +29,12 @@ export default class LinearColorSpaceProjection {
     const colorsAlongX = []
     const normalizedColorsAlongX = [];
     const opponencyAlongX = [];
+    const bOpponencyAlongX = [];
     for (let x = 0; x < imageData.width; x++) {
       const colorsAlongY = []
       const normalizedColorsAlongY = []
       const opponencyAlongY = []
+      const bOpponencyAlongY = []
       for (let y = 0; y < imageData.height; y++) {
         const color = getPixelAtCoordinate(x, y, imageData);
         const normalizedSum = (color.r + color.g + color.b) + 0.00001;
@@ -41,18 +43,23 @@ export default class LinearColorSpaceProjection {
           color.g / normalizedSum * 255,
           color.b / normalizedSum * 255
         )
+        if (color.r + color.g + color.b === 0) {
+          break;
+        }
         colorsAlongY.push(color)
         normalizedColorsAlongY.push(normalizedColor)
-        opponencyAlongY.push((normalizedColor.r + normalizedColor.b) - (2 * normalizedColor.g));
+        opponencyAlongY.push(normalizedColor.r - normalizedColor.g);
+        bOpponencyAlongY.push(normalizedColor.b - (0.60975609756 * normalizedColor.r + 0.39024390243 * normalizedColor.g));
       }
       colorsAlongX.push(averageColors(colorsAlongY));
       normalizedColorsAlongX.push(averageColors(normalizedColorsAlongY));
+      console.log(opponencyAlongY.length)
       opponencyAlongX.push(calcAverage(opponencyAlongY));
-      debugger;
+      bOpponencyAlongX.push(calcAverage(bOpponencyAlongY));
     }
     const smoothedOpponencyAlongX = smooth(opponencyAlongX, 3);
     const peaks = minimalFindPeaks(smoothedOpponencyAlongX, this.peakDetection.minDistance, this.peakDetection.minHeight);
-    state[this.outputName] = { colorsAlongX, normalizedColorsAlongX, opponencyAlongX, smoothedOpponencyAlongX, peaks }
+    state[this.outputName] = { colorsAlongX, normalizedColorsAlongX, opponencyAlongX, bOpponencyAlongX, smoothedOpponencyAlongX, peaks }
     return {
       result: true,
       reason: "",
